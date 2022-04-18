@@ -1,18 +1,68 @@
 // Screens/PlantLibraryScreen.js
 import React from 'react'
-import {View,Text} from 'react-native'
+import {ScrollView, StyleSheet, View,Text} from 'react-native'
 
 
 
 class PlantLibraryScreen extends React.Component{
     render(){
         return(
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-               <Text>Plant Library !</Text>
-            </View>
+        <ScrollView>
+              <Text style={styles.menu}>Plant Library</Text>
+        </ScrollView>
         )
     }
 }
+
+const styles = StyleSheet.create({
+
+  container: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F5FCFF'
+  },
+  title: {
+      marginTop: 16,
+      paddingVertical: 8,
+      borderWidth: 4,
+      width: 400,
+      borderColor: "#20232a",
+      borderRadius: 6,
+      backgroundColor: "#8fbc8f",
+      color: "#20232a",
+      textAlign: "center",
+      fontSize: 15,
+      fontWeight: 'bold',
+      marginLeft: 5
+  },
+  text: {
+          marginTop: 16,
+          paddingVertical: 8,
+          borderWidth: 4,
+          width: 400,
+          borderColor: "#20232a",
+          borderRadius: 6,
+          backgroundColor: "#8fbc8f",
+          color: "#20232a",
+          textAlign: "center",
+          fontSize: 15,
+          marginLeft: 5
+  },
+  image:{
+      height: 49,
+      width: 48,
+  },
+  menu:{
+          marginTop: 0,
+          textAlign: 'center',
+          fontSize: 28,
+          fontWeight: 'bold',
+          color: 'black'
+  }
+
+});
+
+
 
 
 export default PlantLibraryScreen
