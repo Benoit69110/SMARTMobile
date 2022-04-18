@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {View} from 'react-native'
+import {Image, View} from 'react-native'
 import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
@@ -18,11 +18,11 @@ class TabMenu extends React.Component {
         return (
                 <NavigationContainer>
                     <Tab.Navigator>
-                        <Tab.Screen name="Home" component={HomeScreen} />
-                        <Tab.Screen name="Library" component={PlantLibraryScreen} />
-                        <Tab.Screen name="Add a plant" component={AddPlantScreen} />
-                        <Tab.Screen name="Social Network" component={SocialNetworkScreen} />
-                        <Tab.Screen name="Profile" component={SettingsScreen} />
+                        <Tab.Screen name="Home" component={HomeScreen} options={{tabBarIcon: () => (<Image source={require("../assets/menu.png")} style={{width: 20, height: 20}} />)}}/>
+                        <Tab.Screen name="Library" component={PlantLibraryScreen} options = {{tabBarIcon: () => (<Image source={require("../assets/library.png")} style={{width: 20, height: 20}} />)}}/>
+                        <Tab.Screen name="Add a plant" component={AddPlantScreen} options = {{tabBarIcon: () => (<Image source={require("../assets/add_plant.png")} style={{width: 20, height: 20}} />)}}/>
+                        <Tab.Screen name="Social Network" component={SocialNetworkScreen} options = {{tabBarIcon: () => (<Image source={require("../assets/network.png")} style={{width: 20, height: 20}} />)}}/>
+                        <Tab.Screen name="Profile" component={SettingsScreen} options = {{tabBarIcon: () => (<Image source={require("../assets/profile.png")} style={{width: 20, height: 20}} />)}}/>
                     </Tab.Navigator>
                 </NavigationContainer>
             
