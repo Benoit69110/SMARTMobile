@@ -1,6 +1,6 @@
 // Screens/PlantLibraryScreen.js
 import React from 'react'
-import {ScrollView,FlatList, Image, StyleSheet, View,Text} from 'react-native'
+import {ScrollView, Alert, TouchableOpacity, FlatList, Image, StyleSheet, View,Text} from 'react-native'
 
 
 
@@ -42,6 +42,7 @@ class PlantLibraryScreen extends React.Component{
                          {key: require('../assets/plante.jpg')}
                      ]}
                      renderItem={ ({ item, index }) => (
+                     <TouchableOpacity onPress={() => Alert.alert('image clicked')}>
                          <Image source={item.key} /* Use item to set the image source */
                          key={index} /* Important to set a key for list items,
                                                      but it's wrong to use indexes as keys, see below */
@@ -53,6 +54,7 @@ class PlantLibraryScreen extends React.Component{
                             margin:8
                          }}
                      />
+                     </TouchableOpacity>
                    )}
                 />
         </ScrollView>
