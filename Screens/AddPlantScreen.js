@@ -1,14 +1,15 @@
 // Screens/AddPlantScreen.js
 import React from 'react'
-import {StyleSheet, ScrollView, View,Text} from 'react-native'
-
+import {StyleSheet, ScrollView,Text} from 'react-native'
+import InfoPlant from '../Components/InfoPlant';
 
 
 class AddPlantScreen extends React.Component{
     render(){
         return(
         <ScrollView>
-              <Text style={styles.menu}>Add a plant</Text>
+              <Text style={styles.menu}>Add a plant to your library</Text>
+              <InfoPlant/>
         </ScrollView>
         )
     }
