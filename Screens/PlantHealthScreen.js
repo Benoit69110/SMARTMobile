@@ -6,7 +6,7 @@ import { Animated } from 'react-native';
 
 
 class AddPlantScreen extends React.Component{
-
+    // au lieu d'avoir les éléments en dur on va les récup du back et les mettre dans le state on pourra avoir les changements en live
     state = {
         temperature : 20,
         humidity: 20,

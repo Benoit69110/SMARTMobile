@@ -15,10 +15,11 @@ class HomeScreen extends React.Component{
               <FlatList
                    horizontal={true}
                    showsHorizontalScrollIndicator={true}
-
+                   {/* au lieu d'avoir le tableau json data on aura la réponse du back et il suffira de prendre les données, il nous faudra l'id de la plante, la photo et les notifications associées et aussi une catégorie pour afficher un icone?*/}
                    data={[
                        {key: require('../assets/plante.jpg'), id: 1200, notification : 'Your plant needs more water!', topic: 'water' }
                    ]}
+                   {/* Touchable permet de rendre l'élement cliquable, quand on clique dessus on aura direct accès au carnet de santé de la plante*/}
                    renderItem={ ({ item, index }) => (
                    <TouchableOpacity onPress={() => this.props.navigation.navigate('Plant Health',{plant_id: item.id})}>
                    <View style={styles.notification}>
