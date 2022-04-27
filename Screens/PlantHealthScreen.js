@@ -24,53 +24,6 @@ class AddPlantScreen extends React.Component{
         return(
         <ScrollView>
               <Text style={styles.menu}>Plant Health Book</Text>
-              <Text style={styles.text}>Please select a plant amongst your library to see observe its health book.</Text>
-              <View>
-                    <Image source={this.state.plant_image}
-                            key={this.state.plant_id}
-                            style={{
-                               marginTop: 10,
-                               marginLeft: 120,
-                               width: 150,
-                               height: 150,
-                               borderRadius: 200/2,
-                               borderColor:'#aba8c8'
-                            }}
-                    />
-              </View>
-              <View>
-                    <TextInput
-                        label ={"Name : " + this.state.name}
-                        style={{height: 50, marginTop: 10}}
-                        onChangeText={(text) => this.setState({name : text})}
-                        placeholder="Change name"
-                    />
-                    <TextInput
-                         label = {"Water needs : " + this.state.water}
-                         tyle={{height: 50, marginTop: 200}}
-                         onChangeText={(text) => this.setState({water: text})}
-                         placeholder="Change water needs"
-                    />
-                    <TextInput
-                          label = {"Climate : " + this.state.climate}
-                          style={{height: 50, marginTop: 0}}
-                          onChangeText={(text) => this.setState({climate : text})}
-                          placeholder="Change climate"
-                    />
-                    <TextInput
-                          label = {"Sun needs : " + this.state.sun}
-                          style={{height: 50}}
-                          onChangeText={(text) => this.setState({sun : text})}
-                          placeholder="Change sun needs"
-                    />
-                    <TextInput
-                          label = {"Aromatics : " + this.state.aromatics}
-                          style={{height: 50}}
-                          onChangeText={(text) => this.setState({aromatics: text})}
-                          placeholder="Change aromatics"
-                    />
-              </View>
-
         </ScrollView>
         )
     }
