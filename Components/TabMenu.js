@@ -4,11 +4,12 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
 import HomeScreen from '../Screens/HomeScreen'
+import HomeScreen2 from '../Screens/HomeScreenLoggedIn'
 import SettingsScreen from '../Screens/SettingsScreen'
 import AddPlantScreen from '../Screens/AddPlantScreen'
 import PlantLibraryScreen from '../Screens/PlantLibraryScreen'
 import SocialNetworkScreen from '../Screens/SocialNetworkScreen'
-
+import PlantHealthScreen from '../Screens/PlantHealthScreen'
 
 
 const Tab = createMaterialTopTabNavigator();
@@ -18,8 +19,10 @@ class TabMenu extends React.Component {
         return (
                 <NavigationContainer>
                     <Tab.Navigator>
+                        <Tab.Screen name="Home2" component={HomeScreen2} options={{tabBarIcon: () => (<Image source={require("../assets/menu.png")} style={{width: 20, height: 20}} />)}}/>
                         <Tab.Screen name="Home" component={HomeScreen} options={{tabBarIcon: () => (<Image source={require("../assets/menu.png")} style={{width: 20, height: 20}} />)}}/>
                         <Tab.Screen name="Library" component={PlantLibraryScreen} options = {{tabBarIcon: () => (<Image source={require("../assets/library.png")} style={{width: 20, height: 20}} />)}}/>
+                        <Tab.Screen name="Plant Health" component={PlantHealthScreen} options = {{tabBarIcon: () => (<Image source={require("../assets/health.png")} style={{width: 20, height: 20}} />)}}/>
                         <Tab.Screen name="Add a plant" component={AddPlantScreen} options = {{tabBarIcon: () => (<Image source={require("../assets/add_plant.png")} style={{width: 20, height: 20}} />)}}/>
                         <Tab.Screen name="Social Network" component={SocialNetworkScreen} options = {{tabBarIcon: () => (<Image source={require("../assets/network.png")} style={{width: 20, height: 20}} />)}}/>
                         <Tab.Screen name="Profile" component={SettingsScreen} options = {{tabBarIcon: () => (<Image source={require("../assets/profile.png")} style={{width: 20, height: 20}} />)}}/>
