@@ -4,32 +4,36 @@ import {ScrollView, Alert, TouchableOpacity, FlatList, Image, StyleSheet, View,T
 import HomeScreen from '../Screens/HomeScreen'
 import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { getAlivePlantLibrary, getDeadPlantLibrary} from '../API/PlantIFApi';
 
+const userMail = "lenabel2000@hotmail.fr"
+var aliveLibrary = getAlivePlantLibrary(userMail)
+var deadLibrary = getDeadPlantLibrary(userMail)
 
 class PlantLibraryScreen extends React.Component{
 
-    state = {
-        isClicked: false
-    };
-    // fonction pour passer à la page d'affichage du carnet de santé
-    showCarnetSante() {
-       this.setState({ isClicked: true });
+      state = {
+           userMail: userMail,
+           aliveLibrary: aliveLibrary,
+           deadLibrary: deadLibrary
+      }
 
-    }
+
+
+
+
     render(){
         return(
         <ScrollView>
               <Text style={styles.menu}>Plant Library</Text>
               <Text style={styles.title}>This is your plant library: here will appear all of the monitored plants that you have in your possession.</Text>
-              <Text style={styles.title}>Recently added plants: </Text>
+              <Text style={styles.title}>Alive plants: </Text>
 
                 <FlatList
                   horizontal={true}
                   showsHorizontalScrollIndicator={true}
 
-                  data={[
-                     {key: require('../assets/plante.jpg'), id: 1200}
-                  ]}
+                  data= {this.state.aliveLibrary}
                   renderItem={ ({ item, index }) => (
 
                   <TouchableOpacity onPress={() => this.props.navigation.navigate('Plant Health',{plant_id: item.id})}>
@@ -38,6 +42,7 @@ class PlantLibraryScreen extends React.Component{
                       style={{
                         width: 200,
                         height:150,
+                        borderRadius: 50,
                         borderWidth:2,
                         borderColor:'#8fbc8f',
                         margin:8
@@ -46,23 +51,21 @@ class PlantLibraryScreen extends React.Component{
                   </TouchableOpacity>
                   )}
                 />
-                <Text style={styles.title}>All of your plants: </Text>
+                <Text style={styles.title}>Dead plants: </Text>
                 <FlatList
                      horizontal={true}
                      showsHorizontalScrollIndicator={true}
 
-                     data={[
-                         {key: require('../assets/fleur.jpg'), id: 1230},
-                         {key: require('../assets/plante.jpg'), id: 1300}
-                     ]}
+                     data = {this.state.deadLibrary}
                      renderItem={ ({ item, index }) => (
-                     <TouchableOpacity onPress={() => this.props.navigation.navigate('Plant Health',{plant_id: item.id})}>
+                     <TouchableOpacity onPress={() => alert('This plant is dead, you cannot interact with it anymore')}>
                          <Image source={item.key}
                          key={index}
                          style={{
                             width:200,
                             height:150,
                             borderWidth:2,
+                            borderRadius: 50,
                             borderColor:'#8fbc8f',
                             margin:8
                          }}

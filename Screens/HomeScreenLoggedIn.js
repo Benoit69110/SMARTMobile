@@ -7,6 +7,8 @@ const MENU = Image.resolveAssetSource(MenuImage).uri;
 // comment trouver la taille de l'écran sans coder les tailles en dur?
 // on met quoi dedans?
 class HomeScreen extends React.Component{
+
+
     render(){
         return(
         <ScrollView>
