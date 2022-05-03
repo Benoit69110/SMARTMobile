@@ -1,7 +1,7 @@
 export function addPlant(plantInfos){
     console.log("Add a plant with API")
 
-     const url="http://192.168.020/ActionServlet"
+     const url="http://192.168.56.1/ActionServlet"
      return fetch(
          url,
          {
@@ -30,14 +30,14 @@ export function addPlant(plantInfos){
 export function getDeadPlantLibrary(mail){
     console.log("Get dead plant library")
 
-     /*const url="http://192.168.020/ActionServlet"
+     const url="http://192.168.56.1/ActionServlet"
      return fetch(
          url,
          {
             method: 'post',
             data: {
                todo: 'listDeadPlants',
-               userMail: userMail
+               userMail: mail
             },
              headers: {
                  'Content-Type':'application/json',
@@ -45,27 +45,27 @@ export function getDeadPlantLibrary(mail){
          }
      )
      .then((response)=>response.json())
-     .catch((error)=>console.error(error))*/
-    data=[
+     .catch((error)=>console.error(error))
+    /*data=[
       {
         key: require('../assets/fleur.jpg'),
         id: "1230"
       }
     ]
-    return (data);
+    return (data);*/
 }
 
 export function getAlivePlantLibrary(mail){
     console.log("Get alive plant library")
 
-     /*const url="http://192.168.020/ActionServlet"
+     const url="http://192.168.020/ActionServlet"
      return fetch(
          url,
          {
             method: 'post',
             data: {
                todo: "listAlivePlants",
-               userMail: userMail
+               userMail: mail
             },
              headers: {
                  'Content-Type':'application/json',
@@ -73,7 +73,7 @@ export function getAlivePlantLibrary(mail){
          }
      )
      .then((response)=>response.json())
-     .catch((error)=>console.error(error))*/
+     .catch((error)=>console.error(error))
 
 
     /*var res = Math.random();
@@ -83,11 +83,11 @@ export function getAlivePlantLibrary(mail){
         res= 1
     }
     return res;*/
-    data=[
+    /*data=[
       {
         key: require('../assets/plante.jpg'),
         id: "1300"
       }
     ]
-    return (data);
+    return (data);*/
 }
