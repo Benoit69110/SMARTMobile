@@ -2,8 +2,7 @@
 import React from 'react'
 import {View,Text} from 'react-native'
 import Logo from './Logo'
-import Navigation from './Navigation'
-import TabMenu from './TabMenu'
+import Navigation from '../Navigation/LoginNavigation'
 
 
 

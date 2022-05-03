@@ -6,15 +6,10 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 
 import HomeScreen from '../Screens/HomeScreen'
-import HomeScreen2 from '../Screens/HomeScreenLoggedIn'
 import SettingsScreen from '../Screens/SettingsScreen'
 import AddPlantScreen from '../Screens/AddPlantScreen'
-import PlantLibraryScreen from '../Screens/PlantLibraryScreen'
 import SocialNetworkScreen from '../Screens/SocialNetworkScreen'
-// import PlantHealthScreen from '../Screens/PlantHealthScreen'
-import PlantHealthStackNavigator from '../Navigation/LibraryNavigation';
-import SignInScreen from '../Screens/SignInScreen'
-import SignUpScreen from '../Screens/SignUpScreen'
+import PlantHealthStackNavigator from './LibraryNavigation';
 
 const HOME_ICON=<FontAwesome name="home" size={25} color='#449C76'/>
 const LIBRARY_ICON=<FontAwesome name="list-ul" size={25} color='#449C76'/>
@@ -37,7 +32,6 @@ class TabMenu extends React.Component {
                             tabBarShowLabel: false,
                         }}
                     >
-                        {/* <Tab.Screen name="Home2" component={HomeScreen2} options={{tabBarIcon: () => (<Image source={require("../assets/menu.png")} style={{width: 20, height: 20}} />)}}/> */}
                         <Tab.Screen 
                             name="Home" 
                             component={HomeScreen} 

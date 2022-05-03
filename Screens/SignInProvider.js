@@ -3,7 +3,6 @@ import { View,Text,StyleSheet,ScrollView } from 'react-native';
 
 import {useNavigation} from '@react-navigation/native';
 import  AsyncStorage  from '@react-native-async-storage/async-storage';
-import TabMenu from '../Components/TabMenu';
 
 
 
