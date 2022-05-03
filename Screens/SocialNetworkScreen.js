@@ -4,9 +4,11 @@ import {StyleSheet, Dimensions,ScrollView, View,Text, Image} from 'react-native'
 import MapView from 'react-native-maps';
 import { Marker } from "react-native-maps";
 import LogoImage from '../assets/logo.png';
+import { getVisiblePlants} from '../API/PlantIFApi';
 
 const LOGO = Image.resolveAssetSource(LogoImage).uri;
-
+const userMail = "lenabel2000@hotmail.fr";
+var visiblePlants = getVisiblePlants(userMail);
 
 class SettingsScreen extends React.Component{
 
@@ -24,41 +26,21 @@ class SettingsScreen extends React.Component{
             latituteDelta: 0,
             longitudeDelta: 0
         },
-      markers: [
-        {
-          key: "Hi",
-          latlng:  {
-               latitude: 45.771944,
-               longitude: 4.86,
-               latituteDelta: 0.01,
-               longitudeDelta: 0.01
-          },
-          title: "Mayarachide",
-          description: "Type de plante: Rafflesia arnoldi"
-        },
-        {
-           key: "Hii",
-           latlng:  {
-               latitude: 45.771944,
-               longitude: 4.93,
-               latituteDelta: 0.01,
-               longitudeDelta: 0.01
-           },
-           title: "Benoit le renoi",
-           description: "Type de plante : Rose rouge"
-        },
-        {
-          key: "Hiii",
-          latlng: {latitude: 52,longitude: 5.00},
-          title: "Plus",
-          description: "Hello"
-        },
-      ],
+        markers: visiblePlants,
+        title: "",
+        type_plante: "",
+        humeur: "",
+        photo : "",
+        isAlive : undefined
      };
 
 
     setRegion = (region) => {
       this.setState({ region : region });
+    }
+
+    markerClick(title,type_plante,photo, humeur,isAlive) {
+          this.setState({ title:  title, photo: photo, humeur: humeur, type_plante: type_plante, isAlive: isAlive});
     }
     render(){
         return(
@@ -75,6 +57,7 @@ class SettingsScreen extends React.Component{
                 >
                 <Marker
                     coordinate={this.state.myPlant}
+                    title= "Your plant"
                     pinColor = "red"
                 />
                 {this.state.markers.map((marker) => (
@@ -82,14 +65,16 @@ class SettingsScreen extends React.Component{
                             key={marker.key}
                             coordinate={marker.latlng}
                             title={marker.title}
-                            description={marker.description}
                             pinColor = "green"
+                            onPress={() => this.markerClick(marker.title,marker.type_plante,marker.photo, marker.humeur,marker.isAlive)}
                     />
-
                 ))}
             </MapView>
-            <Text style={styles.text}>Current latitude: {this.state.region.latitude}</Text>
-            <Text style={styles.text}>Current longitude: {this.state.region.longitude}</Text>
+            <Text style={styles.text}>Nom de la plante: {this.state.title}{"\n"}
+            Type de la plante: {this.state.type_plante}{"\n"}
+            Humeur de la plante : {this.state.humeur}{"\n"}
+            Vivante: {this.state.isAlive}{"\n"}
+            Photo: {this.state.photo}</Text>
         </View>
         )
     }

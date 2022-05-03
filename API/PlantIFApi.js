@@ -130,7 +130,10 @@ export function getVisiblePlants(mail){
                 longitudeDelta: 0.01
            },
            title: "Mayarachide",
-           description: "Type de plante: Rafflesia arnoldi"
+           type_plante: "Orchidée",
+           photo: "../assets/plante.jpg",
+           humeur: "Happy",
+           isAlive: "yes"
          },
          {
             key: "Hii",
@@ -141,14 +144,25 @@ export function getVisiblePlants(mail){
                 longitudeDelta: 0.01
             },
             title: "Benoit le renoi",
-            description: "Type de plante : Rose rouge"
+            type_plante: "Orchidée",
+            photo: '../assets/fleur.jpg',
+            humeur: "Dead",
+            isAlive: "no"
          },
          {
            key: "Hiii",
-           latlng: {latitude: 52,longitude: 5.00},
-           title: "Plus",
-           description: "Hello"
+           latlng:  {
+                latitude: 45.771944,
+                longitude: 4.8,
+                latituteDelta: 0.01,
+                longitudeDelta: 0.01
+           },
+            title: "Hello",
+            type_plante: "Rose rouge",
+            photo: "../assets/plant.jpg",
+            humeur: "Sad",
+            isAlive: "yes"
          },
        ]
-    return (data);
+    return (markers);
 }

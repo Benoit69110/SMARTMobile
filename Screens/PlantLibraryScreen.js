@@ -18,10 +18,6 @@ class PlantLibraryScreen extends React.Component{
            deadLibrary: deadLibrary
       }
 
-
-
-
-
     render(){
         return(
         <ScrollView>
