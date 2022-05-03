@@ -30,7 +30,7 @@ class TabMenu extends React.Component {
     }
     render(){
         return (
-                <NavigationContainer>
+                <NavigationContainer independent={true}>
                     <Tab.Navigator 
                         initialRouteName="Home"
                         screenOptions={{
