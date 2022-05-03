@@ -1,6 +1,7 @@
 // Screens/SocialNetworkScreen.js
 import React from 'react'
 import {StyleSheet, ScrollView, View,Text} from 'react-native'
+import Chart from '../Components/Chart';
 
 
 
@@ -9,6 +10,7 @@ class SettingsScreen extends React.Component{
         return(
         <ScrollView>
               <Text style={styles.menu}>Friends</Text>
+              <Chart/>
         </ScrollView>
         )
     }

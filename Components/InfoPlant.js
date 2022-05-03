@@ -337,7 +337,7 @@ class FindPlant extends React.Component{
        
         var needsArray={needs:{}}
         for(var item of this.state.infosPlant){
-            var title=item.title
+            var title=item.placeholder
             title=title.replace(/ :/g,'')
             title=title.replace(/ /g,'')
             needsArray.needs[title]=item.value
@@ -345,7 +345,7 @@ class FindPlant extends React.Component{
         var completeArray={todo: "addPlant"}
         completeArray={...completeArray,...profileArray}
         completeArray={...completeArray,...needsArray}
-
+        console.log(completeArray)
         var res=this._checkProfileFields()
         
         if(res==0){
