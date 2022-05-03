@@ -13,6 +13,9 @@ import PlantLibraryScreen from '../Screens/PlantLibraryScreen'
 import SocialNetworkScreen from '../Screens/SocialNetworkScreen'
 // import PlantHealthScreen from '../Screens/PlantHealthScreen'
 import PlantHealthStackNavigator from '../Navigation/LibraryNavigation';
+import SignInScreen from '../Screens/SignInScreen'
+import SignUpScreen from '../Screens/SignUpScreen'
+import SignInProvider from '../Screens/SignInProvider'
 
 const HOME_ICON=<FontAwesome name="home" size={25} color='#449C76'/>
 const LIBRARY_ICON=<FontAwesome name="list-ul" size={25} color='#449C76'/>
@@ -35,6 +38,9 @@ class TabMenu extends React.Component {
                             tabBarShowLabel: false,
                         }}
                     >
+                        <Tab.Screen name="SignInProvider" component={SignInProvider} />
+                        <Tab.Screen name="SignIn" component={SignInScreen} />
+                        <Tab.Screen name="SignUp" component={SignUpScreen} />
                         {/* <Tab.Screen name="Home2" component={HomeScreen2} options={{tabBarIcon: () => (<Image source={require("../assets/menu.png")} style={{width: 20, height: 20}} />)}}/> */}
                         <Tab.Screen 
                             name="Home" 
