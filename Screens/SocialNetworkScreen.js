@@ -1,15 +1,39 @@
 // Screens/SocialNetworkScreen.js
 import React from 'react'
-import {StyleSheet, ScrollView, View,Text} from 'react-native'
-
+import {StyleSheet, Dimensions,ScrollView, View,Text} from 'react-native'
+import MapView from 'react-native-maps';
 
 
 class SettingsScreen extends React.Component{
+
+     state = {
+        region: {
+            latitude: 45.771944,
+            longitude: 4.8901709,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421
+        }
+     }
+
+    setRegion = (region) => {
+      this.setState({ region : region });
+    }
     render(){
         return(
-        <ScrollView>
-              <Text style={styles.menu}>Friends</Text>
-        </ScrollView>
+        <View style = {styles.container}>
+        <MapView
+             initialRegion={{
+                latitude: 45.771944,
+                longitude: 4.8901709,
+                latitudeDelta: 0.0922,
+                longitudeDelta: 0.0421,
+             }}
+            style = {styles.map}
+            onRegionChangeComplete={this.setRegion}
+        />
+        <Text style={styles.text}>Current latitude: {this.state.region.latitude}</Text>
+        <Text style={styles.text}>Current longitude: {this.state.region.longitude}</Text>
+        </View>
         )
     }
 }
@@ -17,9 +41,13 @@ class SettingsScreen extends React.Component{
 const styles = StyleSheet.create({
 
   container: {
-    justifyContent: 'center',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'flex-end',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF'
   },
   title: {
       marginTop: 16,
@@ -58,7 +86,14 @@ const styles = StyleSheet.create({
           fontSize: 28,
           fontWeight: 'bold',
           color: 'black'
-  }
+  },
+      map: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+      },
 
 });
 

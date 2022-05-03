@@ -23,6 +23,8 @@ target 'SMARTMobile' do
 
   pod 'react-native-image-picker', :path => '../node_modules/react-native-image-picker'
 
+  pod 'react-native-maps', :path => '../node_modules/react-native-maps'
+
   target 'SMARTMobileTests' do
     inherit! :complete
     # Pods for testing
