@@ -1,8 +1,11 @@
 // Screens/SocialNetworkScreen.js
 import React from 'react'
-import {StyleSheet, Dimensions,ScrollView, View,Text} from 'react-native'
+import {StyleSheet, Dimensions,ScrollView, View,Text, Image} from 'react-native'
 import MapView from 'react-native-maps';
 import { Marker } from "react-native-maps";
+import LogoImage from '../assets/logo.png';
+
+const LOGO = Image.resolveAssetSource(LogoImage).uri;
 
 
 class SettingsScreen extends React.Component{
@@ -28,20 +31,23 @@ class SettingsScreen extends React.Component{
     render(){
         return(
         <View style = {styles.container}>
-        <MapView
-             initialRegion={{
-                latitude: 45.771944,
-                longitude: 4.8901709,
-                latitudeDelta: 0.0922,
-                longitudeDelta: 0.0421,
-             }}
-            style = {styles.map}
-            onRegionChangeComplete={this.setRegion}
-        >
-        <Marker coordinate={this.state.myPlant} />
-        </MapView>
-        <Text style={styles.text}>Current latitude: {this.state.region.latitude}</Text>
-        <Text style={styles.text}>Current longitude: {this.state.region.longitude}</Text>
+            <MapView
+                initialRegion={{
+                    latitude: 45.771944,
+                    longitude: 4.8901709,
+                    latitudeDelta: 0.0922,
+                    longitudeDelta: 0.0421,
+                }}
+                style = {styles.map}
+                onRegionChangeComplete={this.setRegion}
+                >
+                <Marker
+                    coordinate={this.state.myPlant}
+                    image={{uri:LOGO}}
+                />
+            </MapView>
+            <Text style={styles.text}>Current latitude: {this.state.region.latitude}</Text>
+            <Text style={styles.text}>Current longitude: {this.state.region.longitude}</Text>
         </View>
         )
     }
