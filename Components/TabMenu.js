@@ -12,7 +12,6 @@ import SocialNetworkScreen from '../Screens/SocialNetworkScreen'
 import PlantHealthScreen from '../Screens/PlantHealthScreen'
 import SignInScreen from '../Screens/SignInScreen'
 import SignUpScreen from '../Screens/SignUpScreen'
-import SignInProvider from '../Screens/SignInProvider'
 
 
 const Tab = createMaterialTopTabNavigator();
@@ -20,11 +19,8 @@ const Tab = createMaterialTopTabNavigator();
 class TabMenu extends React.Component {
     render(){
         return (
-                <NavigationContainer>
+                <NavigationContainer independent={true}>
                     <Tab.Navigator>
-                        <Tab.Screen name="SignInProvider" component={SignInProvider} />
-                        <Tab.Screen name="SignIn" component={SignInScreen} />
-                        <Tab.Screen name="SignUp" component={SignUpScreen} />
                         <Tab.Screen name="Home2" component={HomeScreen2} options={{tabBarIcon: () => (<Image source={require("../assets/menu.png")} style={{width: 20, height: 20}} />)}}/>
                         <Tab.Screen name="Home" component={HomeScreen} options={{tabBarIcon: () => (<Image source={require("../assets/menu.png")} style={{width: 20, height: 20}} />)}}/>
                         <Tab.Screen name="Library" component={PlantLibraryScreen} options = {{tabBarIcon: () => (<Image source={require("../assets/library.png")} style={{width: 20, height: 20}} />)}}/>

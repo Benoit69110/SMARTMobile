@@ -20,7 +20,7 @@ const SignInScreen = ()=> {
         // Validate user
 
         AsyncStorage.setItem('token', username);
-        navigation.navigate('Home');
+        navigation.navigate('TabMenu');
     };
 
     const onForgotPasswordPressed = () =>{

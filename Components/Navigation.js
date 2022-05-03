@@ -6,6 +6,8 @@ import SignInScreen from '../Screens/SignInScreen';
 import SignUpScreen from '../Screens/SignUpScreen';
 import HomeScreen from '../Screens/HomeScreen';
 import SignInProvider from '../Screens/SignInProvider';
+import TabMenu from './TabMenu'
+
 
 const Stack = createNativeStackNavigator();
 
@@ -17,6 +19,7 @@ const Navigation = ()=> {
                 <Stack.Screen name="SignIn" component={SignInScreen} />
                 <Stack.Screen name="SignUp" component={SignUpScreen} />
                 <Stack.Screen name="Home" component={HomeScreen} />
+                <Stack.Screen name="TabMenu" component={TabMenu} />
             </Stack.Navigator>
         </NavigationContainer>
     )

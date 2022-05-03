@@ -2,6 +2,7 @@
 import React from 'react'
 import {View,Text} from 'react-native'
 import Logo from './Logo'
+import Navigation from './Navigation'
 import TabMenu from './TabMenu'
 
 
@@ -11,7 +12,7 @@ class Header extends React.Component{
         return(
             <View style={{flex:1}}>
                 <Logo/>
-                <TabMenu/>
+                <Navigation/>
             </View>
             
         )
