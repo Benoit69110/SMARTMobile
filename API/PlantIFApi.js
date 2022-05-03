@@ -31,34 +31,58 @@ export function addPlant(plantInfos){
 export function testApi(){
     console.log("Test Plant if API")
 
-    const url=URL+"?todo=getPlant&arduinoNumber=1002105"
+    const url=URL//+"?todo=getPlant&arduinoNumber=1002105"
+    const data=JSON.stringify({
+        todo: 'newPlant',
+        arduinoNumber: '12346'
+    })
     return fetch(url,
         {
             method: 'POST',
+            body: data,
             headers: {
                 'Content-Type':'application/json',
             },
         }
     )
-    .then((response)=>response.text())
+    .then((response)=>console.log(response.status))
     .catch((error)=>console.error(error))
 
 }
 
 export function getProfilePlant(arduinoNumber){
-    return ({
-        customizeName:"myPlant",
-        deviceId: 100205,
-        address: '73 bd des provinces',
-        zip: 69110
-    })
+    return fetch("https://www.data.qld.gov.au/api/3/action/datastore_search?resource_id=fd297d03-bf72-40c7-b27e-24cc7023360c",
+        // {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type':'application/json',
+        //     },
+        // }
+    )
+    .then((response)=> ({
+            customizeName:"myPlant",
+            deviceId: '100205',
+            address: '73 bd des provinces',
+            zip: '69110'
+        })
+    )
+    .catch((error)=>console.error(error))
 }
 
 export function getNeedsPlant(arduinoNumber){
-    return ({
-        customizeName:"myPlant",
-        deviceId: 100205,
-        address: '73 bd des provinces',
-        zip: 69110
-    })
+    return fetch("https://www.data.qld.gov.au/api/3/action/datastore_search?resource_id=fd297d03-bf72-40c7-b27e-24cc7023360c",
+        // {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type':'application/json',
+        //     },
+        // }
+    )
+    .then((response)=> ({
+            commonName: "common Name 123",
+            botanicalName: 'botanical Name',
+            maintenance: 'low'
+        })
+    )
+    .catch((error)=>console.error(error))
 }

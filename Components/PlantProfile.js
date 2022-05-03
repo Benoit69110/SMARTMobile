@@ -1,6 +1,6 @@
 import * as React from 'react';
-import {ScrollView, FlatList, TextInput, StyleSheet, View,Text} from 'react-native'
-import { getProfilePlant } from '../API/PlantIFApi';
+import {ScrollView, ActivityIndicator, TextInput, StyleSheet, View,Text} from 'react-native'
+import { getProfilePlant, getNeedsPlant } from '../API/PlantIFApi';
 
 const PLANT_INFOS=[
     {
@@ -86,17 +86,26 @@ const PLANT_INFOS=[
 class PlantProfile extends React.Component{
     constructor(props){
         super(props)
+        var copyPlantInfos=[...PLANT_INFOS]
         this.state={
             profile:{customizeName:"",deviceId:"",address:"",zip:""},
-            needs: PLANT_INFOS
+            needs: copyPlantInfos,
+            needsLoaded: false,
+            profileLoaded: false,
+            editable: false
         }
         this.idPlant=this.props.route.params.idPlant
+        
     }
 
     _profilePlant(){
+        if(!this.state.profileLoaded){
+            this._getProfilePlant()
+        }
         return (
             <View style={styles.main_container}>
                 <Text style={styles.title_container}>Profile of your plant :</Text>
+                {this._displayProfileLoading()}
                 <View style={styles.profile_container}>
                     <View style={styles.name_field_container}>
                         <Text style={styles.name_field}>Name :</Text>
@@ -109,6 +118,7 @@ class PlantProfile extends React.Component{
                             placeholder='Choose a name for your plant'
                             value={this.state.profile.customizeName}
                             onChangeText={(text)=>this._profileTextInputChanged('customizeName',text)}
+                            editable={this.state.editable}
                         />
                         <View style={{flexDirection: 'row'}}>
                             <TextInput 
@@ -116,6 +126,7 @@ class PlantProfile extends React.Component{
                                 placeholder='Address'
                                 value={this.state.profile.address}
                                 onChangeText={(text)=>this._profileTextInputChanged('address',text)}
+                                editable={this.state.editable}
                             />
                             <TextInput 
                                 style={[styles.text_input,{width:'28%'}]}
@@ -123,6 +134,7 @@ class PlantProfile extends React.Component{
                                 placeholder='Zip code'
                                 value={this.state.profile.zip}
                                 onChangeText={(text)=>this._profileTextInputChanged('zip',text)}
+                                editable={this.state.editable}
                             />
                         </View>
                         <TextInput 
@@ -130,6 +142,7 @@ class PlantProfile extends React.Component{
                             placeholder='Device ID'
                             value={this.state.profile.deviceId}
                             onChangeText={(text)=>this._profileTextInputChanged('deviceId',text)}
+                            editable={this.state.editable}
                         />
                     </View>
                 </View>
@@ -138,9 +151,13 @@ class PlantProfile extends React.Component{
     }
 
     _plantsNeeds(){
+        if(!this.state.needsLoaded){
+            this._getNeedsPlant()
+        }
         return (
             <View style={styles.main_container}>
                 <Text style={styles.title_container}>Needs of your plant :</Text>
+                {this._displayNeedsLoading()}
                 { this.state.needs.map((item)=>
                     <View key={item.id} style={{flexDirection:'row'}}>
                             <Text style={styles.name_field}>{item.title}</Text>
@@ -150,6 +167,7 @@ class PlantProfile extends React.Component{
                                     placeholder={item.placeholder}
                                     value={item.value}
                                     onChangeText={(text)=>this._needsTextInputChanged(text,item.id)}
+                                    editable={this.state.editable}
                                 />
                             </View>
                     </View>
@@ -158,11 +176,9 @@ class PlantProfile extends React.Component{
         )
     }    
     _profileTextInputChanged(input,text){
-        console.log('text profile',text)
         var newProfile=this.state.profile
         newProfile[input]=text
         this.setState({profile: newProfile})
-        console.log("state",this.state)
     }
 
     _needsTextInputChanged(text,id){
@@ -173,49 +189,58 @@ class PlantProfile extends React.Component{
 
     _getProfilePlant(){
         getProfilePlant(this.idPlant).then(data=> {
-            console.log(data)
-            this.setState({profile: data})
+            // console.log(data)
+            this.setState({
+                profile: data,
+                profileLoaded:true
+            })
         })
     }
 
     _getNeedsPlant(){
         getNeedsPlant(this.idPlant).then(data=> {
-            var newInfos=this.state.needs
+            var newInfos=[...this.state.needs]
             for(var item in data){
-                newInfos[data[item].id]
-                newInfos[item.id]=data[item]
+                for(var elt in newInfos){
+                    var title=newInfos[elt].placeholder
+                    title=title.replace(/ :/g,'')
+                    title=title.replace(/ /g,'')
+                    if(title.toLowerCase()==item.toLowerCase()){
+                        var tempEl={...newInfos[elt]}
+                        tempEl.value=data[item]
+                        newInfos[elt]=tempEl
+                    }
+                }
             }
-            console.log(newInfos)
-            this.setState({needs: newInfos})
+            // console.log(newInfos)
+            this.setState({
+                needs: newInfos,
+                needsLoaded:true
+            })
         })
     }
-
-    // {
-    //     id: '1',
-    //     title: 'Common Name :',
-    //     placeholder: 'Common Name',
-    //     value: '',
-    // },
-    // {
-    //     id: '2',
-    //     title: 'Botanical Name :',
-    //     placeholder: 'Botanical Name',
-    //     value: '',
-    // },
-
+    _displayNeedsLoading(){
+        if(!this.state.needsLoaded){
+            return(
+                <View style={styles.loading_container}>
+                    <ActivityIndicator size='large'/>
+                </View>
+            )
+        }
+    }
+    _displayProfileLoading(){
+        if(!this.state.profileLoaded){
+            return(
+                <View style={styles.loading_container}>
+                    <ActivityIndicator size='large'/>
+                </View>
+            )
+        }
+    }
     render(){
-        var data ={
-            customizeName: 'ici',
-            cool :{pk:'la'}
-        }
-        for(var item in PLANT_INFOS){
-            
-            console.log("item",item)
-            console.log("value",PLANT_INFOS[item].id)
-        }
         return (
             <ScrollView>
-                <Text>Profile of the plant id : {this.idPlant}</Text>
+                <Text style={styles.title_container}>Plant id : {this.idPlant}</Text>
                 {this._profilePlant()}
                 {this._plantsNeeds()}
             </ScrollView>
@@ -252,7 +277,8 @@ const styles=StyleSheet.create({
         margin: 5,
         fontSize: 14,
         borderBottomWidth: 1,
-        borderBottomColor: '#37474F'
+        borderBottomColor: '#37474F',
+        color: 'black'
     },
     name_field:{
         marginBottom: 10,
@@ -265,7 +291,18 @@ const styles=StyleSheet.create({
         fontSize: 20,
         color: 'black',
         fontWeight: 'bold',
+        textAlign: 'center',
     },
+    loading_container: {
+        // position: 'absolute',
+        // left: 0,
+        // right: 0,
+        // top: 100,
+        // bottom: 0,
+        alignItems: 'center',
+        justifyContent: 'center',
+  
+    }
 })
 
 export default PlantProfile
