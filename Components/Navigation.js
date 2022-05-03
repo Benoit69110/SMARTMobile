@@ -18,7 +18,6 @@ const Navigation = ()=> {
                 <Stack.Screen name="SignInProvider" component={SignInProvider} />
                 <Stack.Screen name="SignIn" component={SignInScreen} />
                 <Stack.Screen name="SignUp" component={SignUpScreen} />
-                <Stack.Screen name="Home" component={HomeScreen} />
                 <Stack.Screen name="TabMenu" component={TabMenu} />
             </Stack.Navigator>
         </NavigationContainer>
