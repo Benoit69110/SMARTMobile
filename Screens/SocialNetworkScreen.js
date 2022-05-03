@@ -2,6 +2,7 @@
 import React from 'react'
 import {StyleSheet, Dimensions,ScrollView, View,Text} from 'react-native'
 import MapView from 'react-native-maps';
+import { Marker } from "react-native-maps";
 
 
 class SettingsScreen extends React.Component{
@@ -12,6 +13,12 @@ class SettingsScreen extends React.Component{
             longitude: 4.8901709,
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421
+        },
+        myPlant: {
+            latitude: 45.771944,
+            longitude: 4.8901709,
+            latituteDelta: 0.01,
+            longitudeDelta: 0.01
         }
      }
 
@@ -30,7 +37,9 @@ class SettingsScreen extends React.Component{
              }}
             style = {styles.map}
             onRegionChangeComplete={this.setRegion}
-        />
+        >
+        <Marker coordinate={this.state.myPlant} />
+        </MapView>
         <Text style={styles.text}>Current latitude: {this.state.region.latitude}</Text>
         <Text style={styles.text}>Current longitude: {this.state.region.longitude}</Text>
         </View>
