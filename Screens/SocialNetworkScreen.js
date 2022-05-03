@@ -4,11 +4,14 @@ import {StyleSheet, Dimensions,ScrollView, View,Text, Image} from 'react-native'
 import MapView from 'react-native-maps';
 import { Marker } from "react-native-maps";
 import LogoImage from '../assets/logo.png';
-import { getVisiblePlants} from '../API/PlantIFApi';
+import { getVisiblePlants, getAlivePlantLibrary} from '../API/PlantIFApi';
 
 const LOGO = Image.resolveAssetSource(LogoImage).uri;
 const userMail = "lenabel2000@hotmail.fr";
+// plants that are visible
 var visiblePlants = getVisiblePlants(userMail);
+// your plants
+var alivePlants = getAlivePlantLibrary(userMail);
 
 class SettingsScreen extends React.Component{
 
@@ -17,21 +20,15 @@ class SettingsScreen extends React.Component{
         region: {
             latitude: 45.771944,
             longitude: 4.8901709,
-            latitudeDelta: 0,
-            longitudeDelta: 0
-        },
-        myPlant: {
-            latitude: 45.771944,
-            longitude: 4.8901709,
-            latituteDelta: 0,
-            longitudeDelta: 0
+            latitudeDelta: 0.01,
+            longitudeDelta: 0.01
         },
         markers: visiblePlants,
+        yourPlants: alivePlants,
         title: "",
         type_plante: "",
         humeur: "",
         photo : "",
-        isAlive : undefined
      };
 
 
@@ -40,40 +37,37 @@ class SettingsScreen extends React.Component{
     }
 
     markerClick(title,type_plante,photo, humeur,isAlive) {
-          this.setState({ title:  title, photo: photo, humeur: humeur, type_plante: type_plante, isAlive: isAlive});
+          this.setState({ title:  title, photo: photo, humeur: humeur, type_plante: type_plante});
     }
     render(){
         return(
         <View style = {styles.container}>
             <MapView
-                initialRegion={{
-                    latitude: 45.771944,
-                    longitude: 4.8901709,
-                    latitudeDelta: 0.0922,
-                    longitudeDelta: 0.0421,
-                }}
+                initialRegion={this.state.yourPlants[0].coordinates}
                 style = {styles.map}
                 onRegionChangeComplete={this.setRegion}
                 >
-                <Marker
-                    coordinate={this.state.myPlant}
-                    title= "Your plant"
-                    pinColor = "red"
-                />
+                {this.state.yourPlants.map((marker) => (
+                    <Marker
+                            key={marker.key}
+                            coordinate={marker.latlng}
+                            title={marker.title}
+                            pinColor = "red"
+                    />
+                ))}
                 {this.state.markers.map((marker) => (
                     <Marker
                             key={marker.key}
                             coordinate={marker.latlng}
                             title={marker.title}
                             pinColor = "green"
-                            onPress={() => this.markerClick(marker.title,marker.type_plante,marker.photo, marker.humeur,marker.isAlive)}
+                            onPress={() => this.markerClick(marker.title,marker.type_plante,marker.photo, marker.humeur)}
                     />
                 ))}
             </MapView>
-            <Text style={styles.text}>Nom de la plante: {this.state.title}{"\n"}
+            <Text style={styles.title}>Nom de la plante: {this.state.title}{"\n"}
             Type de la plante: {this.state.type_plante}{"\n"}
             Humeur de la plante : {this.state.humeur}{"\n"}
-            Vivante: {this.state.isAlive}{"\n"}
             Photo: {this.state.photo}</Text>
         </View>
         )

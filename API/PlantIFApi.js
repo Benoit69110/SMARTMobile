@@ -83,13 +83,22 @@ export function getAlivePlantLibrary(mail){
         res= 1
     }
     return res;*/
-    data=[
-      {
-        key: require('../assets/plante.jpg'),
-        id: "1300"
-      }
+   markers = [
+         {
+           key: "Hi",
+           latlng:  {
+                latitude: 45.771944,
+                longitude: 4.90,
+                latituteDelta: 0.01,
+                longitudeDelta: 0.01
+           },
+           title: "Mayarachide",
+           type_plante: "Orchidée",
+           photo: "../assets/plante.jpg",
+           humeur: "Happy"
+         },
     ]
-    return (data);
+    return (markers);
 }
 
 export function getVisiblePlants(mail){
