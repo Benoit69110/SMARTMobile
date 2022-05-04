@@ -87,8 +87,8 @@ export function getAlivePlantLibrary(mail){
          {
            key: "Hi",
            latlng:  {
-                latitude: 45.771944,
-                longitude: 4.90,
+                latitude: 37.4,
+                longitude: -122,
                 latituteDelta: 0.01,
                 longitudeDelta: 0.01
            },
@@ -133,8 +133,8 @@ export function getVisiblePlants(mail){
          {
            key: "Hi",
            latlng:  {
-                latitude: 45.771944,
-                longitude: 4.86,
+                latitude: 37.6,
+                longitude: -122,
                 latituteDelta: 0.01,
                 longitudeDelta: 0.01
            },
@@ -147,9 +147,9 @@ export function getVisiblePlants(mail){
          {
             key: "Hii",
             latlng:  {
-                latitude: 45.771944,
-                longitude: 4.93,
-                latituteDelta: 0.01,
+                latitude: 37.8,
+                longitude: -122,
+                latituteDelta: 0.02,
                 longitudeDelta: 0.01
             },
             title: "Benoit le renoi",

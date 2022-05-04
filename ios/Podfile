@@ -25,6 +25,8 @@ target 'SMARTMobile' do
 
   pod 'react-native-maps', :path => '../node_modules/react-native-maps'
 
+  pod 'react-native-location', :path => '../node_modules/react-native-location'
+
   target 'SMARTMobileTests' do
     inherit! :complete
     # Pods for testing

@@ -1,10 +1,11 @@
 // Screens/SocialNetworkScreen.js
 import React from 'react'
-import {StyleSheet, Dimensions,ScrollView, View,Text, Image} from 'react-native'
+import {StyleSheet, Dimensions,ScrollView, View,Text, Image, ActivityIndicator, TouchableOpacity} from 'react-native'
 import MapView from 'react-native-maps';
 import { Marker } from "react-native-maps";
 import LogoImage from '../assets/logo.png';
 import { getVisiblePlants, getAlivePlantLibrary} from '../API/PlantIFApi';
+import Geolocation from '@react-native-community/geolocation';
 
 const LOGO = Image.resolveAssetSource(LogoImage).uri;
 const userMail = "lenabel2000@hotmail.fr";
@@ -18,11 +19,17 @@ class SettingsScreen extends React.Component{
 
      state = {
         region: {
-            latitude: 45.771944,
-            longitude: 4.8901709,
-            latitudeDelta: 0.01,
-            longitudeDelta: 0.01
+            latitude: 0,
+            longitude: 0,
+            latitudeDelta: 1.5,
+            longitudeDelta: 1.5
         },
+        myPosition: {
+                                 latitude: 0,
+                                 longitude: 0,
+                                 latitudeDelta: 1.5,
+                                 longitudeDelta: 1.5
+                             },
         markers: visiblePlants,
         yourPlants: alivePlants,
         title: "",
@@ -31,7 +38,26 @@ class SettingsScreen extends React.Component{
         photo : "",
      };
 
+  componentDidMount() {
+    Geolocation.getCurrentPosition(
+      (position) => {
+        let region = {
+                  latitude: position.coords.latitude,
+                  longitude: position.coords.longitude,
+                  latitudeDelta: 1,
+                  longitudeDelta: 1
+        };
+        this.setState({myPosition:region})
+        console.log(this.state.myPosition)
+      },
+      (error) => alert(JSON.stringify(error)),
+      {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
+    );
+  }
 
+    relocate = () => {
+    this.refs.map.animateToRegion(this.state.myPosition, 1);
+    }
     setRegion = (region) => {
       this.setState({ region : region });
     }
@@ -41,12 +67,16 @@ class SettingsScreen extends React.Component{
     }
     render(){
         return(
+        <>
+        {this.state.myPosition.latitude == 0 && this.state.myPosition.longitude == 0 ?
+                <ActivityIndicator size="large" color="#00ff00" style = {{marginTop: 200}} />
+        :
         <View style = {styles.container}>
             <MapView
-                initialRegion={this.state.yourPlants[0].coordinates}
+                ref = "map"
                 style = {styles.map}
-                onRegionChangeComplete={this.setRegion}
-                >
+                onRegionChangeComplete={this.setRegion}>
+
                 {this.state.yourPlants.map((marker) => (
                     <Marker
                             key={marker.key}
@@ -69,13 +99,33 @@ class SettingsScreen extends React.Component{
             Type de la plante: {this.state.type_plante}{"\n"}
             Humeur de la plante : {this.state.humeur}{"\n"}
             Photo: {this.state.photo}</Text>
+            <TouchableOpacity style = {styles.button} onPress = {this.relocate()}><Text style = {styles.buttonText}>back to my position</Text></TouchableOpacity>
         </View>
-        )
-    }
+        }
+        </>
+    )
+
+  }
 }
 
 const styles = StyleSheet.create({
 
+  buttonText: {
+    fontSize: 16,
+    lineHeight: 21,
+    fontWeight: 'bold',
+    letterSpacing: 0.25,
+    color: 'white',
+  },
+  button: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 32,
+    borderRadius: 4,
+    elevation: 3,
+    backgroundColor: 'green',
+  },
   container: {
     position: 'absolute',
     top: 0,
