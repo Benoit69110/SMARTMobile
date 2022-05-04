@@ -1,7 +1,7 @@
 // Components/FindPlant.js
 import React from 'react'
-import {ActivityIndicator,Alert,View,Text,TextInput,TouchableOpacity,Image,StyleSheet,Button} from 'react-native'
-
+import {ActivityIndicator,Alert,View,Text,TextInput,TouchableOpacity,Image,StyleSheet,Button,Switch} from 'react-native'
+// import {Switch} from 'react-native-switch'
 import EntypoIcon from 'react-native-vector-icons/Entypo'
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons'
 
@@ -9,8 +9,9 @@ import * as ImagePicker from 'react-native-image-picker';
 import {PermissionsAndroid} from 'react-native';
 import { getPlantsFromApiWithPicture } from '../API/PlantNetApi';
 import { getPlantCaracteristic } from '../API/WWPDApi';
-import { addPlant } from '../API/PlantIFApi';
+import { addImageToPlant, addPlant } from '../API/PlantIFApi';
 import { isZipCode } from '../Helpers/Validator';
+import { computeWindowedRenderLimits } from 'react-native/Libraries/Lists/VirtualizeUtils';
 
 const CAMERA_ICON=<EntypoIcon name="camera" size={24} color='#449C76'/>
 const GALLERY_ICON=<MaterialIcon name="photo-library" size={24} color='#449C76'/>
@@ -108,16 +109,32 @@ class FindPlant extends React.Component{
             plantCaracteristic :"",
             infosPlant: copyPlantInfos,
             nameIsLoading: false,
-            needsIsLoading: false
+            needsIsLoading: false,
+            visibility: false,
+            profile:{customizeName:"",deviceId:"",address:"",zip:"",city:"",visibility: false},
         }
         this.commonName=""
         this.scientificName=""
         this.resultFindPlant=""
-        
-        this.profile={customizeName:"",deviceId:"",address:"",zip:""}
 
     }
 
+    _initialState(){
+        this.commonName=""
+        this.scientificName=""
+        this.resultFindPlant=""
+
+        var copyPlantInfos=[...PLANT_INFOS]
+        this.setState({
+            image:undefined,
+            plantCaracteristic :"",
+            infosPlant: copyPlantInfos,
+            nameIsLoading: false,
+            needsIsLoading: false,
+            visibility: false,
+            profile:{customizeName:"",deviceId:"",address:"",zip:"",city:"",visibility: false},
+        })
+    }
     _openCameraWithPermission = async() => {
         try {
             const granted = await PermissionsAndroid.request(
@@ -127,7 +144,7 @@ class FindPlant extends React.Component{
                 ImagePicker.launchCamera(
                     {
                         mediaType: 'photo',
-                        includeBase64: false,
+                        includeBase64: true,
                         maxHeight: 200,
                         maxWidth: 200,
                     },
@@ -154,7 +171,7 @@ class FindPlant extends React.Component{
                 ImagePicker.launchImageLibrary(
                     {
                         mediaType: 'photo',
-                        includeBase64: false,
+                        includeBase64: true,
                         maxHeight: 200,
                         maxWidth: 200,
                     },
@@ -300,22 +317,27 @@ class FindPlant extends React.Component{
 
 
     _profileTextInputChanged(input,text){
+        var newProfile=this.state.profile
         switch(input){
             case 'name':
-                this.profile['customizeName']=text
+                newProfile['customizeName']=text
                 break
             case 'address':
-                this.profile['address']=text
+                newProfile['address']=text
                 break
             case 'zip':
-                this.profile['zip']=text
+                newProfile['zip']=text
                 break
             case 'device':
-                this.profile['deviceId']=text
+                newProfile['deviceId']=text
+                break
+            case 'city':
+                newProfile['city']=text
                 break
             default :
-                this.profile={customizeName:"",deviceId:"",address:"",zip:""}
+                newProfile={customizeName:"",deviceId:"",address:"",zip:"",visibility: false}
         }
+        this.setState({profile: newProfile})
     }
 
     _needsTextInputChanged(text,id){
@@ -326,31 +348,42 @@ class FindPlant extends React.Component{
 
 
     _addPlantToLibrary(){
+        // console.log("base 64",this.state.image)
+        addImageToPlant(this.state.image,4).then(data=>console.log(data))
+
+
         var profileArray={
             profile: {
-                deviceId: this.profile.deviceId,
-                customizeName: this.profile.customizeName,
-                address: this.profile.address,
-                zip: this.profile.zip
+                arduinoNumber: this.state.profile.deviceId,
+                customizeName: this.state.profile.customizeName,
+                address: this.state.profile.address,
+                zip: this.state.profile.zip,
+                city: this.state.profile.city,
+                visibility: this.state.profile.visibility.valueOf()
             }
         }
        
         var needsArray={needs:{}}
         for(var item of this.state.infosPlant){
-            var title=item.title
+            var title=item.placeholder
             title=title.replace(/ :/g,'')
             title=title.replace(/ /g,'')
+
+            title=title.charAt(0).toLowerCase() + title.slice(1)
             needsArray.needs[title]=item.value
         }
         var completeArray={todo: "addPlant"}
         completeArray={...completeArray,...profileArray}
         completeArray={...completeArray,...needsArray}
-
+        console.log(completeArray)
         var res=this._checkProfileFields()
-        
         if(res==0){
             console.log("Add the plant to the library if every field are completed")
-            var added=addPlant(completeArray)
+            var added=1
+            addPlant(completeArray).then(result=>{
+                console.log("result add plant",result)
+                this._initialState()
+            })
             if(added==0){
                 Alert.alert(
                     "Error",
@@ -375,20 +408,23 @@ class FindPlant extends React.Component{
     _checkProfileFields(){
         var error=0
         var typeOfError=""
-        if(this.profile.deviceId=="" || this.profile.deviceId==null){
+        if(this.state.profile.deviceId=="" || this.state.profile.deviceId==null){
             error+=1
             typeOfError="Device ID is empty or has an incorrect format."
         }
-        if(this.profile.customizeName=="" || this.profile.customizeName==null){
+        if(this.state.profile.customizeName=="" || this.state.profile.customizeName==null){
             error+=1
             typeOfError="You didn't define a customize name for your plant."
         }
-        if(this.profile.address=="" || this.profile.address==null){
+        if(this.state.profile.address=="" || this.state.profile.address==null){
             error+=1
             typeOfError="Address is empty or has an incorrect format."
         }
-        
-        if(this.profile.zip=="" || this.profile.zip==null || !isZipCode(this.profile.zip)){
+        if(this.state.profile.city=="" || this.state.profile.city==null){
+            error+=1
+            typeOfError="City is empty or has an incorrect format."
+        }
+        if(this.state.profile.zip=="" || this.state.profile.zip==null || !isZipCode(this.state.profile.zip)){
             error+=1
             typeOfError="Zip code is empty or has an incorrect format."
         }
@@ -445,37 +481,63 @@ class FindPlant extends React.Component{
         return (
             <View style={styles.main_container}>
                 <Text style={styles.title_container}>Profile of your plant :</Text>
+                
+                <View style={styles.switch_container}>
+                    <Text style={styles.name_field}>Visible to anyone ?</Text>
+                    <Switch
+                        onValueChange={(val)=>{
+                                this._changeVisbility()
+                            }
+                        }
+                        value={this.state.profile.visibility}
+                        activeText={'Yes'}
+                        inActiveText={'No'}
+                    />
+                </View>
                 <View style={styles.profile_container}>
                     <View style={styles.name_field_container}>
                         <Text style={styles.name_field}>Name :</Text>
                         <Text style={styles.name_field}>Localisation :</Text>
+                        <Text style={styles.name_field}></Text>
                         <Text style={styles.name_field}>Device ID :</Text>
                     </View>
                     <View style={styles.field_container}>
                         <TextInput 
                             style={styles.text_input}
                             placeholder='Choose a name for your plant'
+                            value={this.state.profile.customizeName}
                             onChangeText={(text)=>this._profileTextInputChanged('name',text)}
                         />
+                        <TextInput 
+                            style={[styles.text_input]}
+                            placeholder='Address'
+                            value={this.state.profile.address}
+                            onChangeText={(text)=>this._profileTextInputChanged('address',text)}
+                        />
+
                         <View style={{flexDirection: 'row'}}>
-                            <TextInput 
+                            <TextInput
                                 style={[styles.text_input,{width:'64%'}]}
-                                placeholder='Address'
-                                onChangeText={(text)=>this._profileTextInputChanged('address',text)}
+                                placeholder="City"
+                                value={this.state.profile.city}
+                                onChangeText={(text)=>this._profileTextInputChanged('city',text)}
                             />
                             <TextInput 
                                 style={[styles.text_input,{width:'28%'}]}
                                 keyboardType='numeric'
                                 placeholder='Zip code'
+                                value={this.state.profile.zip}
                                 onChangeText={(text)=>this._profileTextInputChanged('zip',text)}
                             />
                         </View>
                         <TextInput 
                             style={styles.text_input}
                             placeholder='Device ID'
+                            value={this.state.profile.deviceId}
                             onChangeText={(text)=>this._profileTextInputChanged('device',text)}
                         />
                     </View>
+                    
                 </View>
             </View> 
         )
@@ -503,6 +565,9 @@ class FindPlant extends React.Component{
         )
     }    
 
+    _changeVisbility(){
+        this.setState({visibility: !this.state.visibility})
+    }
     render(){
         return(
             <View>
@@ -533,8 +598,11 @@ const styles=StyleSheet.create({
         padding: 10,
         borderRadius: 4,
     },
-    name_field_container:{
-        
+    switch_container:{
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'flex-start',
+        marginBottom: -15,
     },
     uploaded_container:{
         flex: 1,

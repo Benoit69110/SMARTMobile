@@ -38,17 +38,17 @@ const styles = StyleSheet.create({
       marginLeft: 5
   },
   text: {
-          marginTop: 16,
-          paddingVertical: 8,
-          borderWidth: 4,
-          width: 400,
-          borderColor: "#20232a",
-          borderRadius: 6,
-          backgroundColor: "#8fbc8f",
-          color: "#20232a",
-          textAlign: "center",
-          fontSize: 15,
-          marginLeft: 5
+      marginTop: 16,
+      paddingVertical: 8,
+      borderWidth: 4,
+      width: 400,
+      borderColor: "#20232a",
+      borderRadius: 6,
+      backgroundColor: "#8fbc8f",
+      color: "#20232a",
+      textAlign: "center",
+      fontSize: 15,
+      marginLeft: 5
   },
   image:{
       height: 49,

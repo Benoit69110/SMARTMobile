@@ -5,6 +5,7 @@ import CustomInput from '../Components/CustomInput';
 import CustomButton from '../Components/CustomButton';
 import {useNavigation} from '@react-navigation/native';
 import  AsyncStorage  from '@react-native-async-storage/async-storage';
+import { signInUser } from '../API/PlantIFApi';
 
 
 const SignInScreen = ()=> {
@@ -18,9 +19,17 @@ const SignInScreen = ()=> {
     const onSignInPressed = () =>{
         console.warn("Sign in");
         // Validate user
+        signInUser(username,password).then(response=>{
+            console.log(response.connexion)
+            if(response["connexion"]){
+                // AsyncStorage.setItem('token', username);
+                navigation.navigate('TabMenu');
+            }else{
 
-        AsyncStorage.setItem('token', username);
-        navigation.navigate('Home');
+            }
+            
+        })
+        
     };
 
     const onForgotPasswordPressed = () =>{
