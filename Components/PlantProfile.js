@@ -1,6 +1,8 @@
 import * as React from 'react';
-import {ScrollView, ActivityIndicator, TextInput, StyleSheet, View,Text} from 'react-native'
-import { getProfilePlant, getNeedsPlant } from '../API/PlantIFApi';
+import {ScrollView, ActivityIndicator, TextInput, StyleSheet, View,Text,Button,Switch,Alert} from 'react-native'
+// import {Switch} from 'react-native-switch'
+import { getProfilePlant, getNeedsPlant, addPlant } from '../API/PlantIFApi';
+import { isZipCode } from '../Helpers/Validator';
 
 const PLANT_INFOS=[
     {
@@ -88,14 +90,23 @@ class PlantProfile extends React.Component{
         super(props)
         var copyPlantInfos=[...PLANT_INFOS]
         this.state={
-            profile:{customizeName:"",deviceId:"",address:"",zip:""},
+            profile:{customizeName:"",deviceId:"",address:"",zip:"",city:"",visibility: false,creationDate:"-/-/-"},
             needs: copyPlantInfos,
             needsLoaded: false,
             profileLoaded: false,
-            editable: false
+            editable: true
         }
         this.idPlant=this.props.route.params.idPlant
         
+    }
+
+    componentDidMount(){
+        this.setState({editable:false})
+    }
+    _changeVisbility(){
+        var newVisibility=this.state.profile
+        newVisibility.visibility=!this.state.profile.visibility
+        this.setState({visibility: newVisibility})
     }
 
     _profilePlant(){
@@ -104,12 +115,26 @@ class PlantProfile extends React.Component{
         }
         return (
             <View style={styles.main_container}>
-                <Text style={styles.title_container}>Profile of your plant :</Text>
+                <Text style={styles.title_container}>Profile of your plant : (added on {this.state.profile.creationDate})</Text>
                 {this._displayProfileLoading()}
+                <View style={styles.switch_container}>
+                    <Text style={styles.name_field}>Visible to anyone ?</Text>
+                    <Switch
+                        onValueChange={(val)=>{
+                                this._changeVisbility()
+                            }
+                        }
+                        value={this.state.profile.visibility}
+                        activeText={'Yes'}
+                        inActiveText={'No'}
+                        disabled={!this.state.editable}
+                    />
+                </View>
                 <View style={styles.profile_container}>
                     <View style={styles.name_field_container}>
                         <Text style={styles.name_field}>Name :</Text>
                         <Text style={styles.name_field}>Localisation :</Text>
+                        <Text style={styles.name_field}></Text>
                         <Text style={styles.name_field}>Device ID :</Text>
                     </View>
                     <View style={styles.field_container}>
@@ -120,12 +145,19 @@ class PlantProfile extends React.Component{
                             onChangeText={(text)=>this._profileTextInputChanged('customizeName',text)}
                             editable={this.state.editable}
                         />
+                        <TextInput 
+                            style={[styles.text_input]}
+                            placeholder='Address'
+                            value={this.state.profile.address}
+                            onChangeText={(text)=>this._profileTextInputChanged('address',text)}
+                            editable={this.state.editable}
+                        />
                         <View style={{flexDirection: 'row'}}>
-                            <TextInput 
+                            <TextInput
                                 style={[styles.text_input,{width:'64%'}]}
-                                placeholder='Address'
-                                value={this.state.profile.address}
-                                onChangeText={(text)=>this._profileTextInputChanged('address',text)}
+                                placeholder="City"
+                                value={this.state.profile.city}
+                                onChangeText={(text)=>this._profileTextInputChanged('city',text)}
                                 editable={this.state.editable}
                             />
                             <TextInput 
@@ -237,12 +269,128 @@ class PlantProfile extends React.Component{
             )
         }
     }
+    
+    _reportDeath(){
+        console.log("My plant is dead")
+    }
+    _modifyPlant(){
+        console.log("Modification of my plant")
+
+        var profileArray={
+            profile: {
+                arduinoNumber: this.state.profile.deviceId,
+                customizeName: this.state.profile.customizeName,
+                address: this.state.profile.address,
+                zip: this.state.profile.zip,
+                city: this.state.profile.city,
+                visibility: this.state.profile.visibility.valueOf()
+            }
+        }
+       
+        var needsArray={needs:{}}
+        for(var item of this.state.needs){
+            var title=item.placeholder
+            title=title.replace(/ :/g,'')
+            title=title.replace(/ /g,'')
+
+            title=title.charAt(0).toLowerCase() + title.slice(1)
+            needsArray.needs[title]=item.value
+        }
+        var completeArray={todo: "addPlant"}
+        completeArray={...completeArray,...profileArray}
+        completeArray={...completeArray,...needsArray}
+        console.log(completeArray)
+        var res=this._checkProfileFields()
+        if(res==0){
+            console.log("Add the plant to the library if every field are completed")
+            var added=1
+            addPlant(completeArray).then(result=>{
+                console.log("result add plant",result)
+            })
+            if(added==0){
+                Alert.alert(
+                    "Error",
+                    "An error occurred... Your plant hasn't been added to your library.",
+                    [{
+                        text: "Ok",
+                    }]
+                )
+            }else{
+                Alert.alert(
+                    "Success !",
+                    "Congratulations ! Your plant has been successfully added to your library.",
+                    [{
+                        text: "Ok",
+                    }]
+                )
+            }
+        }
+        this.setState({editable: false})
+    }
+
+    _checkProfileFields(){
+        var error=0
+        var typeOfError=""
+        if(this.state.profile.deviceId=="" || this.state.profile.deviceId==null){
+            error+=1
+            typeOfError="Device ID is empty or has an incorrect format."
+        }
+        if(this.state.profile.customizeName=="" || this.state.profile.customizeName==null){
+            error+=1
+            typeOfError="You didn't define a customize name for your plant."
+        }
+        if(this.state.profile.address=="" || this.state.profile.address==null){
+            error+=1
+            typeOfError="Address is empty or has an incorrect format."
+        }
+        if(this.state.profile.city=="" || this.state.profile.city==null){
+            error+=1
+            typeOfError="City is empty or has an incorrect format."
+        }
+        if(this.state.profile.zip=="" || this.state.profile.zip==null || !isZipCode(this.state.profile.zip)){
+            error+=1
+            typeOfError="Zip code is empty or has an incorrect format."
+        }
+
+        if(error>1){
+            Alert.alert(
+                "Error",
+                "Many fields of your plant's profile are incomplete or invalid.",
+            )
+        }else if(error==1){
+            Alert.alert(
+                "Error",
+                typeOfError,
+            )
+        }
+
+        return error
+    }
+
     render(){
         return (
             <ScrollView>
-                <Text style={styles.title_container}>Plant id : {this.idPlant}</Text>
+                <Text style={styles.menu}>Plant id : {this.idPlant}</Text>
+                <View style={styles.main_container}>
+                    <Button
+                        title="My plant is dead"
+                        onPress={()=>this._reportDeath()}
+                    />
+                </View>
+                <View style={styles.main_container}>
+                    <Button
+                        title="Modify my plant"
+                        onPress={()=>this.setState({editable: true})}
+                    />
+                </View>
                 {this._profilePlant()}
                 {this._plantsNeeds()}
+                <View style={styles.main_container}>
+                    <Button
+                        title="Save changes"
+                        onPress={()=>this._modifyPlant()}
+                    />
+                </View>
             </ScrollView>
         )
     }
@@ -258,8 +406,18 @@ const styles=StyleSheet.create({
         padding: 10,
         borderRadius: 4,
     },
-    name_field_container:{
-        
+    menu:{
+        marginTop: 0,
+        textAlign: 'center',
+        fontSize: 28,
+        fontWeight: 'bold',
+        color: 'black'
+    },
+    switch_container:{
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'flex-start',
+        marginBottom: -15,
     },
     field_container:{
         flex:1,
@@ -291,7 +449,7 @@ const styles=StyleSheet.create({
         fontSize: 20,
         color: 'black',
         fontWeight: 'bold',
-        textAlign: 'center',
+        // textAlign: 'center',
     },
     loading_container: {
         // position: 'absolute',
