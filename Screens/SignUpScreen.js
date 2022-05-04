@@ -4,6 +4,8 @@ import Logo from '../assets/Logo_1.png';
 import CustomInput from '../Components/CustomInput';
 import CustomButton from '../Components/CustomButton';
 import {useNavigation} from '@react-navigation/native';
+import  AsyncStorage  from '@react-native-async-storage/async-storage';
+import { registerUser } from '../API/PlantIFApi';
 
 
 const SignUpScreen = ()=> {
@@ -18,7 +20,17 @@ const SignUpScreen = ()=> {
 
     const onRegisterPressed = () =>{
         console.warn("onRegisterPressed");
-        navigation.navigate('Home');
+        var infosUser={
+            todo: "newUser",
+            name: username,
+            mail: email,
+            password: password
+        }
+        registerUser(infosUser).then(result=>{
+            console.log(result)
+            // AsyncStorage.setItem('token', username);
+            // navigation.navigate('TabMenu');
+        })
     };
 
 

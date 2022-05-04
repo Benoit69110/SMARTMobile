@@ -1,11 +1,8 @@
 // Screens/Home.js
 import React from 'react'
-import {Image, Icon, Button, ScrollView, VirtualizedList, FlatList,StyleSheet, View,Text, TouchableOpacity} from 'react-native'
+import {Image, ScrollView, FlatList,StyleSheet, View,Text, TouchableOpacity} from 'react-native'
 import MenuImage from '../assets/menu.png';
 
-const MENU = Image.resolveAssetSource(MenuImage).uri;
-// comment trouver la taille de l'écran sans coder les tailles en dur?
-// on met quoi dedans?
 class HomeScreen extends React.Component{
 
 
