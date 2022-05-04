@@ -24,12 +24,7 @@ class SettingsScreen extends React.Component{
             latitudeDelta: 1.5,
             longitudeDelta: 1.5
         },
-        myPosition: {
-                                 latitude: 0,
-                                 longitude: 0,
-                                 latitudeDelta: 1.5,
-                                 longitudeDelta: 1.5
-                             },
+        myPosition: undefined,
         markers: visiblePlants,
         yourPlants: alivePlants,
         title: "",
@@ -38,7 +33,7 @@ class SettingsScreen extends React.Component{
         photo : "",
      };
 
-  componentDidMount() {
+  relocate() {
     Geolocation.getCurrentPosition(
       (position) => {
         let region = {
@@ -48,6 +43,7 @@ class SettingsScreen extends React.Component{
                   longitudeDelta: 1
         };
         this.setState({myPosition:region})
+        this.refs.map.animateToRegion(region)
         console.log(this.state.myPosition)
       },
       (error) => alert(JSON.stringify(error)),
@@ -55,9 +51,6 @@ class SettingsScreen extends React.Component{
     );
   }
 
-    relocate = () => {
-    this.refs.map.animateToRegion(this.state.myPosition, 1);
-    }
     setRegion = (region) => {
       this.setState({ region : region });
     }
@@ -67,10 +60,6 @@ class SettingsScreen extends React.Component{
     }
     render(){
         return(
-        <>
-        {this.state.myPosition.latitude == 0 && this.state.myPosition.longitude == 0 ?
-                <ActivityIndicator size="large" color="#00ff00" style = {{marginTop: 200}} />
-        :
         <View style = {styles.container}>
             <MapView
                 ref = "map"
@@ -101,8 +90,7 @@ class SettingsScreen extends React.Component{
             Photo: {this.state.photo}</Text>
             <TouchableOpacity style = {styles.button} onPress = {this.relocate()}><Text style = {styles.buttonText}>back to my position</Text></TouchableOpacity>
         </View>
-        }
-        </>
+
     )
 
   }
