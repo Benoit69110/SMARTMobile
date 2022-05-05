@@ -55,9 +55,18 @@ const SignUpScreen = ()=> {
             registerUser(infosUser).then(response=>{
                 console.log(response)
                 if(response["connexion"]){
-                    var pseudo=username.split('@')[0]
+                    var pseudo=email.split('@')[0]
                     AsyncStorage.setItem('token', pseudo);
+                    AsyncStorage.setItem('mail', email);
                     navigation.navigate('TabMenu');
+                }else if(response.error!= ""){
+                    Alert.alert(
+                        "Error",
+                        "An error occurred... "+response.error,
+                        [{
+                            text: "Ok",
+                        }]
+                    )
                 }else{
                     Alert.alert(
                         "Error",

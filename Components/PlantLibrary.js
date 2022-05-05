@@ -2,19 +2,25 @@ import * as React from 'react';
 import {ScrollView, FlatList, Image, StyleSheet, View,Text} from 'react-native'
 import { getAllAlivePlants, getAllDeadPlants } from '../API/PlantIFApi';
 import PlantItem from './PlantItem'
-
+import FocusRender from 'react-navigation-focus-render'
 class PlantLibrary extends React.Component{
+
     constructor(props){
         super(props)
         this.state={
             alivePlants:[],
-            deadPlants: []
+            deadPlants: [],
+            sizeAlive: 0,
+            sizeDead: 0
         }
     }
+
+    
     componentDidMount(){
         this._getAllAlivePlants()
         this._getAllDeadPlants()
     }
+    
     _displayPlantHealth=(idPlant)=>{
         // console.log("Display plant with id " + idPlant)
         this.props.navigation.navigate("PlantHealth",{idPlant: idPlant})
@@ -22,17 +28,19 @@ class PlantLibrary extends React.Component{
 
     _getAllAlivePlants(){
         // console.log("Request all plant alive to Plant'IF API")
-        getAllAlivePlants("bal@gmail.com").then(response=>{
+        getAllAlivePlants().then(response=>{
             // console.log("res==",response.library)
-            this.setState({alivePlants:response.library})
+            this.setState({alivePlants:response.library,sizeAlive: Object.keys(response.library).length})
         })
     }
 
     _getAllDeadPlants(){
         // console.log("Request all plants dead to Plant'IF API")
-        getAllDeadPlants("bal@gmail.com").then(response=>{
-            // console.log("res==",response.library)
-            this.setState({deadPlants:response.library})
+        getAllDeadPlants().then(response=>{
+            console.log("res==",response)
+
+                this.setState({deadPlants:response.library,sizeDead: Object.keys(response.library).length})
+
         })
     }
 
@@ -56,15 +64,17 @@ class PlantLibrary extends React.Component{
                                                 displayPlantHealth={this._displayPlantHealth}
                                             />}
                 />
-                {param=='alive' && this.state.alivePlants.length ==0 ? <Text style={styles.text}>You don't have any alive plant</Text>:null}
-                {param!='alive' && this.state.deadPlants.length ==0 ? <Text style={styles.text}>You don't have any dead plant</Text>:null}
+                {param=='alive' && this.state.sizeAlive === 0 ? <Text style={styles.text}>You don't have any alive plant</Text>:null}
+                {param!='alive' && this.state.sizeDead === 0 ? <Text style={styles.text}>You don't have any dead plant</Text>:null}
             </View>
         )
     }
-
     render(){
+        console.log("test")
         return (
+            
             <ScrollView>
+                <FocusRender>
                 <Text style={styles.menu}>Plant Library</Text>
                 <View style={styles.main_container}>
                     <Text style={styles.title_container}>
@@ -74,7 +84,7 @@ class PlantLibrary extends React.Component{
 
                 {this._displayPlants('alive')}
                 {this._displayPlants('dead')}
-                
+                </FocusRender>
                      
             </ScrollView>
         )

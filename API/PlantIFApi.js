@@ -38,7 +38,7 @@ export function registerUser(userInfos){
                 },
             }
         )
-        .then((response)=>console.log(response.json()))
+        .then((response)=>response.json())
         .catch((error)=>console.error(error))
 }
 
@@ -149,6 +149,26 @@ export function getPlant(idPlant){
         .catch((error)=>console.error(error))
 }
 
+export function reportDeadPlant(idPlant){
+    console.log("Report dead plant to the API")
+    const data=JSON.stringify({
+        todo: "reportDeadPlant",
+        plantId: idPlant
+    })
+    console.log("data sent",data)
+    return fetch(URL,
+            {
+                method: 'POST',
+                body: data,
+                headers: {
+                    'Content-Type':'application/json',
+                },
+            }
+        )
+        .then((response)=>response.json())
+        .catch((error)=>console.error(error))
+    
+}
 
 export function getProfilePlant(idPlant){
     return fetch("https://www.data.qld.gov.au/api/3/action/datastore_search?resource_id=fd297d03-bf72-40c7-b27e-24cc7023360c",
@@ -433,11 +453,10 @@ export function getPlantConstantTemperature(idPlant,date){
     .catch((error)=>console.error(error))
 }
 
-export function getAllAlivePlants(email){
+export function getAllAlivePlants(){
     console.log("Get plants alive")
     const data=JSON.stringify({
         todo: 'listAlivePlants',
-        userMail: email,
     })
     // console.log(data)
     const url=URL
@@ -456,13 +475,12 @@ export function getAllAlivePlants(email){
 
 }
 
-export function getAllDeadPlants(email){
+export function getAllDeadPlants(){
     console.log("Get plant dead")
     const data=JSON.stringify({
         todo: 'listDeadPlants',
-        userMail: email,
     })
-    // console.log(data)
+    console.log(data)
     const url=URL
     return fetch(
         url,

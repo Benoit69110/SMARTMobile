@@ -1,7 +1,5 @@
 import React from 'react'
 import {View,Text,Image,TouchableOpacity,StyleSheet} from 'react-native'
-import Logo from './Logo'
-import Navigation from '../Navigation/LoginNavigation'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import Ionicons from 'react-native-vector-icons/Ionicons'

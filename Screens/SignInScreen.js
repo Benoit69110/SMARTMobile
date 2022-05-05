@@ -33,7 +33,7 @@ const SignInScreen = ()=> {
         if(username == "" && password== ""){
             Alert.alert(
                 "Error",
-                "Username or password is empty.",
+                "Email or password is empty.",
                 [{
                     text: "Ok",
                 }]
@@ -87,7 +87,7 @@ const SignInScreen = ()=> {
                 style = { [styles.logo , {height: height * 0.4} ] } 
                 resizeMode = "contain" 
                 />
-                <CustomInput placeholder="User Name" value={username} setValue={setuserName} />
+                <CustomInput placeholder="Email" value={username} setValue={setuserName} />
                 <CustomInput placeholder="Password" value={password} setValue={setpassword} secureTextEntry />
                 {/* <TextInput
                     mode="outlined"

@@ -260,7 +260,7 @@ class PlantHealth extends React.Component{
                 </Text>
                 <Button
                     title="See my plant's profile"
-                    onPress={()=>this._displayPlantProfile(this.state.healthPlant.plant_id)}
+                    onPress={()=>this._displayPlantProfile(this.props.route.params.idPlant)}
                 />
             </View>
             {this._displayConstant()}

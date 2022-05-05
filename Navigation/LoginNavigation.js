@@ -4,7 +4,6 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import SignInScreen from '../Screens/SignInScreen';
 import SignUpScreen from '../Screens/SignUpScreen';
 import SignInProvider from '../Screens/SignInProvider';
-import SettingsScreen from '../Screens/SettingsScreen';
 import TabMenu from './TabMenu'
 
 

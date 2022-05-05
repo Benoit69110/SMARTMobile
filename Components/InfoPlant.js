@@ -389,30 +389,41 @@ class FindPlant extends React.Component{
                 addPlant(completeArray).then(result=>{
                     console.log("result add plant",result)
                     console.log("plant ID",result.plantId)
-                    addImageToPlant(this.state.image,result.plantId).then(data=>{
-                        console.log(data)
+                    try{
+                        if(result.request=="Ok"){
+                            addImageToPlant(this.state.image,result.plantId).then(data=>{
+                                console.log(data)
+                                this._initialState()
+                            })
+                            Alert.alert(
+                                "Success !",
+                                "Congratulations ! Your plant has been successfully added to your library.",
+                                [{
+                                    text: "Ok",
+                                }]
+                            )
+                        }else{
+                            this._initialState()
+                            Alert.alert(
+                                "Error",
+                                "An error occurred... Your plant hasn't been added to your library.",
+                                [{
+                                    text: "Ok",
+                                }]
+                            )
+                        }
+                        
+                    }catch(e){
                         this._initialState()
-                    })
-                    
-
+                        Alert.alert(
+                            "Error",
+                            "An error occurred... Your plant hasn't been added to your library.",
+                            [{
+                                text: "Ok",
+                            }]
+                        )
+                    }
                 })
-                if(added==0){
-                    Alert.alert(
-                        "Error",
-                        "An error occurred... Your plant hasn't been added to your library.",
-                        [{
-                            text: "Ok",
-                        }]
-                    )
-                }else{
-                    Alert.alert(
-                        "Success !",
-                        "Congratulations ! Your plant has been successfully added to your library.",
-                        [{
-                            text: "Ok",
-                        }]
-                    )
-                }
             }
         }
         

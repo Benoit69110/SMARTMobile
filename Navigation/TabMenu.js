@@ -6,7 +6,6 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 
 import HomeScreen from '../Screens/HomeScreen'
-import SettingsScreen from '../Screens/SettingsScreen'
 import AddPlantScreen from '../Screens/AddPlantScreen'
 import SocialNetworkScreen from '../Screens/SocialNetworkScreen'
 import PlantHealthStackNavigator from './LibraryNavigation';
@@ -26,25 +25,38 @@ class TabMenu extends React.Component {
     }
     render(){
         return (
-                <NavigationContainer independent={true}>
+                <NavigationContainer independent={true} >
                     <Tab.Navigator 
                         initialRouteName="Home"
                         screenOptions={{
                             tabBarShowLabel: false,
+                            unmountOnBlur:true
                         }}
                     >
                         <Tab.Screen 
                             name="Home" 
                             component={HomeScreen} 
                             options={{
-                                tabBarIcon: ()=> HOME_ICON
+                                tabBarIcon: ()=> HOME_ICON,
+                            }}
+                            listeners={{
+                                tabPress: (e) => {
+                                    console.log("try",e.target)
+                                    console.log("reloooooad")
+                                },
                             }}
                         />
                         <Tab.Screen 
                             name="Library" 
                             component={PlantHealthStackNavigator} 
                             options = {{
-                                tabBarIcon: () => LIBRARY_ICON
+                                tabBarIcon: () => LIBRARY_ICON,
+                            }}
+                            listeners={{
+                                tabPress: (e) => {
+                                    this.forceUpdate()
+                                    console.log("reloooooad")
+                                },
                             }}
                         />
                         <Tab.Screen 

@@ -1,7 +1,7 @@
 import * as React from 'react';
-import {ScrollView, ActivityIndicator, TextInput, StyleSheet, View,Text,Button,Switch,Alert} from 'react-native'
+import {ScrollView, ActivityIndicator, TextInput, StyleSheet, View,Text,Button,Switch,Alert,Image} from 'react-native'
 // import {Switch} from 'react-native-switch'
-import { getProfilePlant, getNeedsPlant, addPlant, getPlant } from '../API/PlantIFApi';
+import { getProfilePlant, getNeedsPlant, addPlant, getPlant, reportDeadPlant, getLatestPlantImage } from '../API/PlantIFApi';
 import { isZipCode } from '../Helpers/Validator';
 
 const PLANT_INFOS=[
@@ -103,14 +103,30 @@ class PlantProfile extends React.Component{
             needs: copyPlantInfos,
             needsLoaded: false,
             profileLoaded: false,
-            editable: true
+            editable: true,
+            latestImage:undefined
         }
         this.idPlant=this.props.route.params.idPlant
-        this.idPlant=2
         this._getPlant()
-        
+        this._getLatestImage(this.idPlant)
     }
+    _getLatestImage(idPlant){
+        getLatestPlantImage(idPlant).then(response=>{
+            // console.log(response)
+            try{
+                // console.log(response.request)
 
+                if(response.request=="Failed"){
+                    this.setState({latestImage: require('../assets/plante.jpg')})
+                }else{
+                    var base64Icon = 'data:image/png;base64,'+response.image.data;
+                    this.setState({latestImage: base64Icon})
+                }
+            }catch(e){
+
+            }
+        })
+    }
     componentDidMount(){
         this.setState({editable:false})
     }
@@ -300,7 +316,9 @@ class PlantProfile extends React.Component{
             },
             {
                 text: "Yes",
-                onPress:() => console.log("Yes Pressed"),
+                onPress:() => reportDeadPlant(this.idPlant).then(response=>{
+                    console.log(response)
+                }),
             }]
         )
     }
@@ -327,7 +345,7 @@ class PlantProfile extends React.Component{
             title=title.charAt(0).toLowerCase() + title.slice(1)
             needsArray.needs[title]=item.value
         }
-        var completeArray={todo: "updatePlant",idPlant: 3}
+        var completeArray={todo: "updatePlant",idPlant:  this.idPlant}
         completeArray={...completeArray,...profileArray}
         completeArray={...completeArray,...needsArray}
         console.log(completeArray)
@@ -337,24 +355,34 @@ class PlantProfile extends React.Component{
             var added=1
             addPlant(completeArray).then(result=>{
                 console.log("result add plant",result)
+                try{
+                    if(result.reques=="Ok"){
+                        Alert.alert(
+                            "Success !",
+                            "Congratulations ! Your plant has been successfully modified.",
+                            [{
+                                text: "Ok",
+                            }]
+                        )
+                    }else{
+                        Alert.alert(
+                            "Error",
+                            "An error occurred... Your plant hasn't been modified.",
+                            [{
+                                text: "Ok",
+                            }]
+                        )
+                    }
+                }catch(e){
+                    Alert.alert(
+                        "Error",
+                        "An error occurred... Your plant hasn't been modified.",
+                        [{
+                            text: "Ok",
+                        }]
+                    )
+                }
             })
-            if(added==0){
-                Alert.alert(
-                    "Error",
-                    "An error occurred... Your plant hasn't been modified.",
-                    [{
-                        text: "Ok",
-                    }]
-                )
-            }else{
-                Alert.alert(
-                    "Success !",
-                    "Congratulations ! Your plant has been successfully modified.",
-                    [{
-                        text: "Ok",
-                    }]
-                )
-            }
         }
         this.setState({editable: false})
     }
@@ -402,17 +430,47 @@ class PlantProfile extends React.Component{
         return (
             <ScrollView>
                 <Text style={styles.menu}>Plant id : {this.idPlant}</Text>
-                <View style={styles.main_container}>
-                    <Button
-                        title="My plant is dead"
-                        onPress={()=>this._reportDeath()}
-                    />
-                </View>
-                <View style={styles.main_container}>
-                    <Button
-                        title="Modify my plant"
-                        onPress={()=>this.setState({editable: !this.state.editable})}
-                    />
+                <View style={[styles.main_container,{flexDirection:'row'}]}>
+                    {typeof this.state.latestImage=="string"?
+                        <Image
+                            source={{uri: this.state.latestImage}}
+                            style={{
+                                width: 90,
+                                height: 90,
+                                borderRadius: 20,
+                                borderColor:'#aba8c8',
+                                marginRight: 10,
+                            }}
+                        />
+                    :
+                        <Image
+                            source={require('../assets/plante.jpg')}
+                            style={{
+                                width: 90,
+                                height: 90,
+                                borderRadius: 20,
+                                borderColor:'#aba8c8',
+                                marginRight: 10,
+                            }}
+                        />
+                    }
+                    <View style={{flex:1}}>
+                        <View style={{marginBottom:20}}>
+                            {this.state.profile.alive?
+                                <Button
+                                    title="My plant is dead"
+                                    onPress={()=>this._reportDeath()}
+                                
+                                />
+                            :
+                                <Text style={styles.dead_text}>Your plant is dead</Text>
+                            }
+                        </View>
+                        <Button
+                            title="Modify my plant"
+                            onPress={()=>this.setState({editable: !this.state.editable})}
+                        />
+                    </View>
                 </View>
                 {this._profilePlant()}
                 {this._plantsNeeds()}
@@ -429,6 +487,12 @@ class PlantProfile extends React.Component{
 
 
 const styles=StyleSheet.create({
+    dead_text:{
+        fontSize: 20,
+        color: 'red',
+        fontWeight: 'bold',
+        textAlign: 'center',
+    },  
     main_container:{
         backgroundColor: '#8FF4C8',
         margin: 20,
