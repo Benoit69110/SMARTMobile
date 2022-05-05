@@ -1,4 +1,4 @@
-const URL="http://192.168.43.200/SMARTweb/ActionServlet"
+const URL="http://192.168.137.243:8080/SMARTweb/ActionServlet"
 
 export function addPlant(plantInfos){
     console.log("Add a plant with API")
@@ -37,7 +37,7 @@ export function registerUser(userInfos){
                 },
             }
         )
-        .then((response)=>response.json())
+        .then((response)=>console.log(response.json()))
         .catch((error)=>console.error(error))
 }
 

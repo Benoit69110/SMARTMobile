@@ -21,7 +21,6 @@ const SignUpScreen = ()=> {
 
     const onRegisterPressed = () =>{
         console.warn("onRegisterPressed");
-
         if(email=="" || username=="" || password == "" || passwordRepeat== ""){
             Alert.alert(
                 "Error",

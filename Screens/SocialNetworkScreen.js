@@ -24,7 +24,12 @@ class SettingsScreen extends React.Component{
             latitudeDelta: 1.5,
             longitudeDelta: 1.5
         },
-        myPosition: undefined,
+        myPosition: {
+            latitude: 0,
+            longitude: 0,
+            latitudeDelta: 1.5,
+            longitudeDelta: 1.5
+        },
         markers: visiblePlants,
         yourPlants: alivePlants,
         title: "",
@@ -33,6 +38,9 @@ class SettingsScreen extends React.Component{
         photo : "",
      };
 
+   componentDidMount () {
+        this.relocate()
+   }
   relocate() {
     Geolocation.getCurrentPosition(
       (position) => {
@@ -44,10 +52,9 @@ class SettingsScreen extends React.Component{
         };
         this.setState({myPosition:region})
         this.refs.map.animateToRegion(region)
-        console.log(this.state.myPosition)
       },
       (error) => alert(JSON.stringify(error)),
-      {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
+      {enableHighAccuracy: false, timeout: 20000, maximumAge: 1000}
     );
   }
 
@@ -65,7 +72,12 @@ class SettingsScreen extends React.Component{
                 ref = "map"
                 style = {styles.map}
                 onRegionChangeComplete={this.setRegion}>
-
+                <Marker
+                            key="you"
+                            coordinate={this.state.myPosition}
+                            title="You are here"
+                            pinColor = "blue"
+                />
                 {this.state.yourPlants.map((marker) => (
                     <Marker
                             key={marker.key}
@@ -88,7 +100,6 @@ class SettingsScreen extends React.Component{
             Type de la plante: {this.state.type_plante}{"\n"}
             Humeur de la plante : {this.state.humeur}{"\n"}
             Photo: {this.state.photo}</Text>
-            <TouchableOpacity style = {styles.button} onPress = {this.relocate()}><Text style = {styles.buttonText}>back to my position</Text></TouchableOpacity>
         </View>
 
     )
@@ -127,7 +138,7 @@ const styles = StyleSheet.create({
       marginTop: 16,
       paddingVertical: 8,
       borderWidth: 4,
-      width: 400,
+      width: 350,
       borderColor: "#20232a",
       borderRadius: 6,
       backgroundColor: "#8fbc8f",
@@ -141,7 +152,7 @@ const styles = StyleSheet.create({
           marginTop: 16,
           paddingVertical: 8,
           borderWidth: 4,
-          width: 400,
+          width: 300,
           borderColor: "#20232a",
           borderRadius: 6,
           backgroundColor: "#8fbc8f",

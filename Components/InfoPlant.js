@@ -246,6 +246,7 @@ class FindPlant extends React.Component{
             this.setState({nameIsLoading: true})
             getPlantsFromApiWithPicture(this.state.image)
                 .then(data=>{
+                    console.log(data)
                     if(data.error == undefined){
                         this.resultFindPlant=data
                         this.commonName=data.results[0].species.commonNames[0]
