@@ -6,11 +6,11 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 
 import HomeScreen from '../Screens/HomeScreen'
-import HomeScreenLoggedIn from '../Screens/HomeScreenLoggedIn'
 import SettingsScreen from '../Screens/SettingsScreen'
 import AddPlantScreen from '../Screens/AddPlantScreen'
 import SocialNetworkScreen from '../Screens/SocialNetworkScreen'
 import PlantHealthStackNavigator from './LibraryNavigation';
+import DisconnectNavigation from './DisconnectNavigation';
 
 const HOME_ICON=<FontAwesome name="home" size={25} color='#449C76'/>
 const LIBRARY_ICON=<FontAwesome name="list-ul" size={25} color='#449C76'/>
@@ -40,13 +40,6 @@ class TabMenu extends React.Component {
                                 tabBarIcon: ()=> HOME_ICON
                             }}
                         />
-                         <Tab.Screen 
-                            name="Home2" 
-                            component={HomeScreenLoggedIn} 
-                            options={{
-                                tabBarIcon: ()=> HOME_ICON
-                            }}
-                        />
                         <Tab.Screen 
                             name="Library" 
                             component={PlantHealthStackNavigator} 
@@ -70,11 +63,13 @@ class TabMenu extends React.Component {
                         />
                         <Tab.Screen 
                             name="Profile" 
-                            component={SettingsScreen} 
+                            component={DisconnectNavigation} 
                             options = {{
                                 tabBarIcon: () => PROFILE_ICON
                             }}
                         />
+
+
                     </Tab.Navigator>
                 </NavigationContainer>
             

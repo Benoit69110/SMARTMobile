@@ -4,7 +4,7 @@ import {StyleSheet, Dimensions,ScrollView, View,Text, Image, ActivityIndicator, 
 import MapView from 'react-native-maps';
 import { Marker } from "react-native-maps";
 import LogoImage from '../assets/logo.png';
-import { getVisiblePlants, getAlivePlantLibrary} from '../API/PlantIFApi';
+import { getVisiblePlants } from '../API/PlantIFApi';
 import Geolocation from '@react-native-community/geolocation';
 
 const LOGO = Image.resolveAssetSource(LogoImage).uri;
@@ -12,7 +12,7 @@ const userMail = "lenabel2000@hotmail.fr";
 // plants that are visible
 var visiblePlants = getVisiblePlants(userMail);
 // your plants
-var alivePlants = getAlivePlantLibrary(userMail);
+// var alivePlants = getAlivePlantLibrary(userMail);
 
 class SettingsScreen extends React.Component{
 
@@ -31,7 +31,9 @@ class SettingsScreen extends React.Component{
             longitudeDelta: 1.5
         },
         markers: visiblePlants,
-        yourPlants: alivePlants,
+        // -------------
+        yourPlants: visiblePlants,
+        // ------------
         title: "",
         type_plante: "",
         humeur: "",

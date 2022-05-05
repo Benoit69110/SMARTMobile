@@ -349,63 +349,70 @@ class FindPlant extends React.Component{
 
 
     _addPlantToLibrary(){
-    //    if() 
-
-
-        var profileArray={
-            profile: {
-                arduinoNumber: this.state.profile.deviceId,
-                customizeName: this.state.profile.customizeName,
-                address: this.state.profile.address,
-                zip: this.state.profile.zip,
-                city: this.state.profile.city,
-                visibility: this.state.profile.visibility.valueOf()
+       if(this.state.image==undefined){
+            Alert.alert(
+                "Error",
+                "Select a picture of your plant",
+                [{
+                    text: "Ok",
+                }]
+            )
+       } else{
+            var profileArray={
+                profile: {
+                    arduinoNumber: this.state.profile.deviceId,
+                    customizeName: this.state.profile.customizeName,
+                    address: this.state.profile.address,
+                    zip: this.state.profile.zip,
+                    city: this.state.profile.city,
+                    visibility: this.state.profile.visibility.valueOf()
+                }
             }
-        }
-       
-        var needsArray={needs:{}}
-        for(var item of this.state.infosPlant){
-            var title=item.placeholder
-            title=title.replace(/ :/g,'')
-            title=title.replace(/ /g,'')
+        
+            var needsArray={needs:{}}
+            for(var item of this.state.infosPlant){
+                var title=item.placeholder
+                title=title.replace(/ :/g,'')
+                title=title.replace(/ /g,'')
 
-            title=title.charAt(0).toLowerCase() + title.slice(1)
-            needsArray.needs[title]=item.value
-        }
-        var completeArray={todo: "addPlant"}
-        completeArray={...completeArray,...profileArray}
-        completeArray={...completeArray,...needsArray}
-        console.log(completeArray)
-        var res=this._checkProfileFields()
-        if(res==0){
-            console.log("Add the plant to the library if every field are completed")
-            var added=1
-            addPlant(completeArray).then(result=>{
-                console.log("result add plant",result)
-                console.log("plant ID",result.plantId)
-                addImageToPlant(this.state.image,result.plantId).then(data=>{
-                    console.log(data)
-                    this._initialState()
+                title=title.charAt(0).toLowerCase() + title.slice(1)
+                needsArray.needs[title]=item.value
+            }
+            var completeArray={todo: "addPlant"}
+            completeArray={...completeArray,...profileArray}
+            completeArray={...completeArray,...needsArray}
+            console.log(completeArray)
+            var res=this._checkProfileFields()
+            if(res==0){
+                console.log("Add the plant to the library if every field are completed")
+                var added=1
+                addPlant(completeArray).then(result=>{
+                    console.log("result add plant",result)
+                    console.log("plant ID",result.plantId)
+                    addImageToPlant(this.state.image,result.plantId).then(data=>{
+                        console.log(data)
+                        this._initialState()
+                    })
+                    
+
                 })
-                
-
-            })
-            if(added==0){
-                Alert.alert(
-                    "Error",
-                    "An error occurred... Your plant hasn't been added to your library.",
-                    [{
-                        text: "Ok",
-                    }]
-                )
-            }else{
-                Alert.alert(
-                    "Success !",
-                    "Congratulations ! Your plant has been successfully added to your library.",
-                    [{
-                        text: "Ok",
-                    }]
-                )
+                if(added==0){
+                    Alert.alert(
+                        "Error",
+                        "An error occurred... Your plant hasn't been added to your library.",
+                        [{
+                            text: "Ok",
+                        }]
+                    )
+                }else{
+                    Alert.alert(
+                        "Success !",
+                        "Congratulations ! Your plant has been successfully added to your library.",
+                        [{
+                            text: "Ok",
+                        }]
+                    )
+                }
             }
         }
         

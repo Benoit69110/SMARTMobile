@@ -1,4 +1,5 @@
-const URL="http://192.168.137.243:8080/SMARTweb/ActionServlet"
+// const URL="http://192.168.137.243:8080/SMARTweb/ActionServlet"
+const URL="http://10.0.2.2:8080/SMARTweb/ActionServlet"
 
 export function addPlant(plantInfos){
     console.log("Add a plant with API")
@@ -40,6 +41,50 @@ export function registerUser(userInfos){
         .then((response)=>console.log(response.json()))
         .catch((error)=>console.error(error))
 }
+
+export function modifyUser(userName,mail,newPassword,currentPassword){
+    console.log("Mofify with the API")
+    const data=JSON.stringify({
+        todo: "modifyUser",
+        mail: login,
+        userName: userName,
+        newPassword: newPassword,
+        currentPassword: currentPassword
+    })
+    console.log("data sent",data)
+    return fetch(URL,
+            {
+                method: 'POST',
+                body: data,
+                headers: {
+                    'Content-Type':'application/json',
+                },
+            }
+        )
+        .then((response)=>response.json())
+        .catch((error)=>console.error(error))
+}
+
+export function getUser(mail){
+    console.log("Mofify with the API")
+    const data=JSON.stringify({
+        todo: "getUser",
+        mail: mail
+    })
+    console.log("data sent",data)
+    return fetch(URL,
+            {
+                method: 'POST',
+                body: data,
+                headers: {
+                    'Content-Type':'application/json',
+                },
+            }
+        )
+        .then((response)=>response.json())
+        .catch((error)=>console.error(error))
+}
+
 
 export function signInUser(login,password){
     console.log("Sign in with the API")
@@ -199,7 +244,7 @@ export function getPlantImage(idPlant){
 export function getLatestPlantImage(idPlant){
     console.log("Get Latest image of a plant")
     const data=JSON.stringify({
-        todo: 'getLatestImages',
+        todo: 'getLatestImage',
         plantId: idPlant,
     })
     // console.log(data)
@@ -216,79 +261,6 @@ export function getLatestPlantImage(idPlant){
     )
     .then((response)=>response.json())
     .catch((error)=>console.error(error))
-}
-export function getDeadPlantLibrary(mail){
-    console.log("Get dead plant library")
-
-     /*const url="http://192.168.56.1/ActionServlet"
-     return fetch(
-         url,
-         {
-            method: 'post',
-            data: {
-               todo: 'listDeadPlants',
-               userMail: mail
-            },
-             headers: {
-                 'Content-Type':'application/json',
-             },
-         }
-     )
-     .then((response)=>response.json())
-     .catch((error)=>console.error(error))*/
-    data=[
-      {
-        key: require('../assets/fleur.jpg'),
-        id: "1230"
-      }
-    ]
-    return (data);
-}
-
-export function getAlivePlantLibrary(mail){
-    console.log("Get alive plant library")
-
-     /*const url="http://192.168.020/ActionServlet"
-     return fetch(
-         url,
-         {
-            method: 'post',
-            data: {
-               todo: "listAlivePlants",
-               userMail: mail
-            },
-             headers: {
-                 'Content-Type':'application/json',
-             },
-         }
-     )
-     .then((response)=>response.json())
-     .catch((error)=>console.error(error))*/
-
-
-    /*var res = Math.random();
-    if (res <= 0.5){
-        res=0
-    }else{
-        res= 1
-    }
-    return res;*/
-   markers = [
-         {
-           key: "Hi",
-           latlng:  {
-                latitude: 37.4,
-                longitude: -122,
-                latituteDelta: 0.01,
-                longitudeDelta: 0.01
-           },
-           title: "Mayarachide",
-           type_plante: "Orchidée",
-           photo: "../assets/plante.jpg",
-           humeur: "Happy"
-         },
-    ]
-    return (markers);
 }
 
 export function getVisiblePlants(mail){
@@ -364,4 +336,146 @@ export function getVisiblePlants(mail){
          },
        ]
     return (markers);
+}
+
+export function getPlantConstantGlobal(idPlant,date){
+    console.log("Get plant constant global")
+    const data=JSON.stringify({
+        todo: 'meanGlobal',
+        idPlant: idPlant,
+        date: date
+
+    })
+    // console.log(data)
+    const url=URL
+    return fetch(
+        url,
+        {
+            method: 'post',
+            body: data,
+            headers: {
+                'Content-Type':'application/json',
+            },
+        }
+    )
+    .then((response)=>response.json())
+    .catch((error)=>console.error(error))
+}
+
+export function getPlantConstantWater(idPlant,date){
+    console.log("Get plant constant water")
+    const data=JSON.stringify({
+        todo: 'meanWater',
+        idPlant: idPlant,
+        date: date
+
+    })
+    // console.log(data)
+    const url=URL
+    return fetch(
+        url,
+        {
+            method: 'post',
+            body: data,
+            headers: {
+                'Content-Type':'application/json',
+            },
+        }
+    )
+    .then((response)=>response.json())
+    .catch((error)=>console.error(error))
+}
+
+export function getPlantConstantLight(idPlant,date){
+    console.log("Get plant constant light")
+    const data=JSON.stringify({
+        todo: 'meanLight',
+        idPlant: idPlant,
+        date: date
+
+    })
+    // console.log(data)
+    const url=URL
+    return fetch(
+        url,
+        {
+            method: 'post',
+            body: data,
+            headers: {
+                'Content-Type':'application/json',
+            },
+        }
+    )
+    .then((response)=>response.json())
+    .catch((error)=>console.error(error))
+}
+
+export function getPlantConstantTemperature(idPlant,date){
+    console.log("Get plant constant light")
+    const data=JSON.stringify({
+        todo: 'meanTemp',
+        idPlant: idPlant,
+        date: date
+
+    })
+    // console.log(data)
+    const url=URL
+    return fetch(
+        url,
+        {
+            method: 'post',
+            body: data,
+            headers: {
+                'Content-Type':'application/json',
+            },
+        }
+    )
+    .then((response)=>response.json())
+    .catch((error)=>console.error(error))
+}
+
+export function getAllAlivePlants(email){
+    console.log("Get plants alive")
+    const data=JSON.stringify({
+        todo: 'listAlivePlants',
+        userMail: email,
+    })
+    // console.log(data)
+    const url=URL
+    return fetch(
+        url,
+        {
+            method: 'post',
+            body: data,
+            headers: {
+                'Content-Type':'application/json',
+            },
+        }
+    )
+    .then((response)=>response.json())
+    .catch((error)=>console.error(error))
+
+}
+
+export function getAllDeadPlants(email){
+    console.log("Get plant dead")
+    const data=JSON.stringify({
+        todo: 'listDeadPlants',
+        userMail: email,
+    })
+    // console.log(data)
+    const url=URL
+    return fetch(
+        url,
+        {
+            method: 'post',
+            body: data,
+            headers: {
+                'Content-Type':'application/json',
+            },
+        }
+    )
+    .then((response)=>response.json())
+    .catch((error)=>console.error(error))
+
 }

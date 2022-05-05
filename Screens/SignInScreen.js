@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
-import { View,Text,Image,StyleSheet,useWindowDimensions,ScrollView,Alert } from 'react-native';
+import { View,Text,Image,StyleSheet,useWindowDimensions,ScrollView,Alert,TextInput } from 'react-native';
+
 import Logo from '../assets/Logo_2.png';
 import CustomInput from '../Components/CustomInput';
 import CustomButton from '../Components/CustomButton';
@@ -17,8 +18,17 @@ const SignInScreen = ()=> {
     const{height} = useWindowDimensions();
     const navigation = useNavigation();
 
-    const onSignInPressed = () =>{
+    const onSignInPressed2 = () =>{
         console.warn("Sign in");
+        // Validate user
+        var pseudo=username.split('@')[0]
+        AsyncStorage.setItem('token', pseudo);
+        AsyncStorage.setItem('mail', username);
+        navigation.navigate('TabMenu');
+    }
+
+    const onSignInPressed = () =>{
+        // console.warn("Sign in");
         // Validate user
         if(username == "" && password== ""){
             Alert.alert(
@@ -42,6 +52,7 @@ const SignInScreen = ()=> {
                 if(response["connexion"]){
                     var pseudo=username.split('@')[0]
                     AsyncStorage.setItem('token', pseudo);
+                    AsyncStorage.setItem('mail', username);
                     navigation.navigate('TabMenu');
                 }else{
                     Alert.alert(
@@ -59,11 +70,11 @@ const SignInScreen = ()=> {
     };
 
     const onForgotPasswordPressed = () =>{
-        console.warn("Forgot password");
+        // console.warn("Forgot password");
     };
 
     const onCreateAccountPressed = () =>{
-        console.warn("Don't have an account? Create one");
+        // console.warn("Don't have an account? Create one");
         navigation.navigate('SignUp');
     };
 
@@ -78,6 +89,13 @@ const SignInScreen = ()=> {
                 />
                 <CustomInput placeholder="User Name" value={username} setValue={setuserName} />
                 <CustomInput placeholder="Password" value={password} setValue={setpassword} secureTextEntry />
+                {/* <TextInput
+                    mode="outlined"
+                    label="Email"
+                    backgroundColor = "white"
+                    placeholder="Password"
+                    style={{width:'100%'}}
+                /> */}
                 <CustomButton text="Sign In" onPress={onSignInPressed} />
                 <CustomButton text="Forgot password ?" onPress={onForgotPasswordPressed} type="TERTIAIRY"/>
                 <CustomButton text="Don't have an account? Create one" onPress={onCreateAccountPressed} type="TERTIAIRY"/>

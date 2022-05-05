@@ -11,11 +11,11 @@ import { getLatestImage } from '../Helpers/GetLatestImage'
 import NotificationItem from '../Components/NotificationItem'
 
 
-const HOME_ICON=<FontAwesome name="home" size={25} color='#449C76'/>
-const LIBRARY_ICON=<FontAwesome name="list-ul" size={25} color='#449C76'/>
-const ADD_ICON=<MaterialIcons name="add-circle" size={25} color='#449C76'/>
-const NETWORK_ICON=<MaterialIcons name="group" size={25} color='#449C76'/>
-const PROFILE_ICON=<MaterialIcons name="account-circle" size={25} color='#449C76'/>
+const HOME_ICON=<FontAwesome name="home" size={25} color='black' style={{marginTop: 5}}/>
+const LIBRARY_ICON=<FontAwesome name="list-ul" size={25} color='black' style={{marginTop: 5}}/>
+const ADD_ICON=<MaterialIcons name="add-circle" size={25} color='black' style={{marginTop: 5}}/>
+const NETWORK_ICON=<MaterialIcons name="group" size={25} color='black' style={{marginTop: 5}}/>
+const PROFILE_ICON=<MaterialIcons name="account-circle" size={25} color='black' style={{marginTop: 5}}/>
 const DOWN_ICON=<FontAwesome name="angle-down" size={25} color='#449C76'/>
 
 const TEMPERATURE_ICON=<FontAwesome name="thermometer" size={30} color='#449C76'/>
@@ -75,7 +75,16 @@ class HomeScreen extends React.Component{
                 {Object.entries(TUTORIAL).map(([key,item]) =>
                     <View key={key} style={{flexDirection: 'row'}}>
                         {item.icon}
-                        <Text>{item.value}</Text>
+                        <Text 
+                            style={{
+                                marginLeft:10,
+                                marginBottom:10,
+                                color:'black',
+                                fontSize: 15
+                            }}
+                        >
+                            {item.value}
+                        </Text>
                     </View>
                 )}
             </View>
@@ -111,47 +120,45 @@ class HomeScreen extends React.Component{
                 idPlant: 2,
                 customizeName: "my tulip",
                 image: "blue sky",
-                need: "vdsv",
+                need: "needs more water",
                 problem: 'water'
             },
             {
                 idPlant: 2,
                 customizeName: "my orchid",
                 image: "blue sky",
-                need: "vdsv",
+                need: "needs more sun",
                 problem: 'sun'
             },
             {
                 idPlant: 2,
                 customizeName: "my dandelion",
                 image: "blue sky",
-                need: "vdsv",
+                need: "needs more temperature",
                 problem: 'temperature'
             },
             {
                 idPlant: 2,
                 customizeName: "my dandelion",
                 image: "blue sky",
-                need: "vdsv",
+                need: "needs more picture",
                 problem: 'photo'
             },
             {
                 idPlant: 1200,
                 customizeName: "my dandelion",
                 image: "blue sky",
-                need: "vdsv",
+                need: "is in a bad health",
                 problem: 'general'
             }
         ]
-        // Object.entries(data).map(([key,item]) =>
-        //     this._getLatestImage(item.idPlant)
-        // )
-        // console.log("res",this.state.latestImage)
         return(
             <View style={styles.main_container}>
                 <Text style={styles.title_container}>Notifications :</Text>
                 {Object.entries(data).map(([key,item]) =>
-                    <NotificationItem key={key} plant={item} displayPlantHealth={this._displayPlantHealth}/>
+                    <View key={key}>
+                        <NotificationItem plant={item} displayPlantHealth={this._displayPlantHealth}/>
+                    </View>
                 )}
             </View>
         )
@@ -177,7 +184,7 @@ class HomeScreen extends React.Component{
                     onPress={()=>this.setState({showTutorial: !this.state.showTutorial})}
                     style={{flexDirection: 'row'}}
                 >
-                    <Text style = {styles.title_container} >Tutorial</Text>
+                    <Text style = {[styles.title_container,{marginRight:10}]} >Tutorial</Text>
                     {DOWN_ICON}
                 </TouchableOpacity>
                 {this.state.showTutorial ? this._displayTutorial():null}

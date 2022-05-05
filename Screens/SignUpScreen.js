@@ -20,7 +20,7 @@ const SignUpScreen = ()=> {
 
 
     const onRegisterPressed = () =>{
-        console.warn("onRegisterPressed");
+        // console.warn("onRegisterPressed");
         if(email=="" || username=="" || password == "" || passwordRepeat== ""){
             Alert.alert(
                 "Error",
@@ -74,16 +74,16 @@ const SignUpScreen = ()=> {
 
 
     const onSignInPressed = () =>{
-        console.warn("Have an account? Sign In");
+        // console.warn("Have an account? Sign In");
         navigation.navigate('SignIn');
     };
 
     const onTermsOfUsePressed = () =>{
-        console.warn("onTermsOfUsePressed");
+        // console.warn("onTermsOfUsePressed");
     };
 
     const onPrivacyPolicyPressed = () =>{
-        console.warn("onPrivacyPolicyPressed");
+        // console.warn("onPrivacyPolicyPressed");
     };
 
     return (
