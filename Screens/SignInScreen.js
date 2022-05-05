@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
-import { View,Text,Image,StyleSheet,useWindowDimensions,ScrollView,Alert } from 'react-native';
+import { View,Text,Image,StyleSheet,useWindowDimensions,ScrollView,Alert,TextInput } from 'react-native';
+
 import Logo from '../assets/Logo_2.png';
 import CustomInput from '../Components/CustomInput';
 import CustomButton from '../Components/CustomButton';
@@ -16,6 +17,15 @@ const SignInScreen = ()=> {
 
     const{height} = useWindowDimensions();
     const navigation = useNavigation();
+
+    const onSignInPressed2 = () =>{
+        console.warn("Sign in");
+        // Validate user
+        var pseudo=username.split('@')[0]
+        AsyncStorage.setItem('token', pseudo);
+        AsyncStorage.setItem('mail', username);
+        navigation.navigate('TabMenu');
+    }
 
     const onSignInPressed = () =>{
         console.warn("Sign in");
@@ -42,6 +52,7 @@ const SignInScreen = ()=> {
                 if(response["connexion"]){
                     var pseudo=username.split('@')[0]
                     AsyncStorage.setItem('token', pseudo);
+                    AsyncStorage.setItem('mail', username);
                     navigation.navigate('TabMenu');
                 }else{
                     Alert.alert(
@@ -78,7 +89,14 @@ const SignInScreen = ()=> {
                 />
                 <CustomInput placeholder="User Name" value={username} setValue={setuserName} />
                 <CustomInput placeholder="Password" value={password} setValue={setpassword} secureTextEntry />
-                <CustomButton text="Sign In" onPress={onSignInPressed} />
+                <TextInput
+                    mode="outlined"
+                    label="Email"
+                    backgroundColor = "white"
+                    placeholder="Password"
+                    style={{width:'100%'}}
+                />
+                <CustomButton text="Sign In" onPress={onSignInPressed2} />
                 <CustomButton text="Forgot password ?" onPress={onForgotPasswordPressed} type="TERTIAIRY"/>
                 <CustomButton text="Don't have an account? Create one" onPress={onCreateAccountPressed} type="TERTIAIRY"/>
         </View>

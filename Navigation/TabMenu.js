@@ -10,6 +10,7 @@ import SettingsScreen from '../Screens/SettingsScreen'
 import AddPlantScreen from '../Screens/AddPlantScreen'
 import SocialNetworkScreen from '../Screens/SocialNetworkScreen'
 import PlantHealthStackNavigator from './LibraryNavigation';
+import DisconnectNavigation from './DisconnectNavigation';
 
 const HOME_ICON=<FontAwesome name="home" size={25} color='#449C76'/>
 const LIBRARY_ICON=<FontAwesome name="list-ul" size={25} color='#449C76'/>
@@ -62,11 +63,13 @@ class TabMenu extends React.Component {
                         />
                         <Tab.Screen 
                             name="Profile" 
-                            component={SettingsScreen} 
+                            component={DisconnectNavigation} 
                             options = {{
                                 tabBarIcon: () => PROFILE_ICON
                             }}
                         />
+
+
                     </Tab.Navigator>
                 </NavigationContainer>
             
