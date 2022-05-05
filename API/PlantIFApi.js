@@ -199,7 +199,7 @@ export function getPlantImage(idPlant){
 export function getLatestPlantImage(idPlant){
     console.log("Get Latest image of a plant")
     const data=JSON.stringify({
-        todo: 'getLatestImages',
+        todo: 'getLatestImage',
         plantId: idPlant,
     })
     // console.log(data)

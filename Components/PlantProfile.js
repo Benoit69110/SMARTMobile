@@ -90,13 +90,23 @@ class PlantProfile extends React.Component{
         super(props)
         var copyPlantInfos=[...PLANT_INFOS]
         this.state={
-            profile:{customizeName:"",deviceId:"",address:"",zip:"",city:"",visibility: false,creationDate:"-/-/-"},
+            profile:{
+                customizeName:"",
+                arduinonumber:"",
+                address:"",
+                zip:"",
+                city:"",
+                visibility: false,
+                bornPlant:"-/-/-",
+                alive:true
+            },
             needs: copyPlantInfos,
             needsLoaded: false,
             profileLoaded: false,
             editable: true
         }
         this.idPlant=this.props.route.params.idPlant
+        this.idPlant=2
         this._getPlant()
         
     }
@@ -111,12 +121,12 @@ class PlantProfile extends React.Component{
     }
 
     _profilePlant(){
-        if(!this.state.profileLoaded){
-            this._getProfilePlant()
-        }
+        // if(!this.state.profileLoaded){
+        //     this._getProfilePlant()
+        // }
         return (
             <View style={styles.main_container}>
-                <Text style={styles.title_container}>Profile of your plant : (added on {this.state.profile.creationDate})</Text>
+                <Text style={styles.title_container}>Profile of your plant : (added on {this.state.profile.bornPlant})</Text>
                 {this._displayProfileLoading()}
                 <View style={styles.switch_container}>
                     <Text style={styles.name_field}>Visible to anyone ?</Text>
@@ -173,8 +183,8 @@ class PlantProfile extends React.Component{
                         <TextInput 
                             style={styles.text_input}
                             placeholder='Device ID'
-                            value={this.state.profile.deviceId}
-                            onChangeText={(text)=>this._profileTextInputChanged('deviceId',text)}
+                            value={this.state.profile.arduinonumber}
+                            onChangeText={(text)=>this._profileTextInputChanged('arduinonumber',text)}
                             editable={this.state.editable}
                         />
                     </View>
@@ -184,9 +194,9 @@ class PlantProfile extends React.Component{
     }
 
     _plantsNeeds(){
-        if(!this.state.needsLoaded){
-            this._getNeedsPlant()
-        }
+        // if(!this.state.needsLoaded){
+        //     this._getNeedsPlant()
+        // }
         return (
             <View style={styles.main_container}>
                 <Text style={styles.title_container}>Needs of your plant :</Text>
@@ -222,21 +232,25 @@ class PlantProfile extends React.Component{
 
     _getPlant(){
         getPlant(this.idPlant).then(response=>{
-            console.log(response)
+            if(response){
+                this._getProfilePlant(response.profile)
+                this._getNeedsPlant(response.needs)
+            }
+
         })
     }
-    _getProfilePlant(){
-        getProfilePlant(this.idPlant).then(data=> {
-            // console.log(data)
+    _getProfilePlant(data){
+        if(data!=undefined){
             this.setState({
                 profile: data,
                 profileLoaded:true
             })
-        })
+        }
     }
+        
 
-    _getNeedsPlant(){
-        getNeedsPlant(this.idPlant).then(data=> {
+    _getNeedsPlant(data){
+        if(data!=undefined){
             var newInfos=[...this.state.needs]
             for(var item in data){
                 for(var elt in newInfos){
@@ -255,7 +269,7 @@ class PlantProfile extends React.Component{
                 needs: newInfos,
                 needsLoaded:true
             })
-        })
+        }
     }
     _displayNeedsLoading(){
         if(!this.state.needsLoaded){
@@ -295,7 +309,7 @@ class PlantProfile extends React.Component{
 
         var profileArray={
             profile: {
-                arduinoNumber: this.state.profile.deviceId,
+                arduinoNumber: this.state.profile.arduinonumber,
                 customizeName: this.state.profile.customizeName,
                 address: this.state.profile.address,
                 zip: this.state.profile.zip,
@@ -348,7 +362,7 @@ class PlantProfile extends React.Component{
     _checkProfileFields(){
         var error=0
         var typeOfError=""
-        if(this.state.profile.deviceId=="" || this.state.profile.deviceId==null){
+        if(this.state.profile.arduinonumber=="" || this.state.profile.arduinonumber==null){
             error+=1
             typeOfError="Device ID is empty or has an incorrect format."
         }
