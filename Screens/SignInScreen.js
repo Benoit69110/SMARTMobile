@@ -1,11 +1,11 @@
 import React, {useState} from 'react';
-import { View,Text,Image,StyleSheet,useWindowDimensions,ScrollView } from 'react-native';
+import { View,Text,Image,StyleSheet,useWindowDimensions,ScrollView,TextInput } from 'react-native';
 import Logo from '../assets/Logo_2.png';
 import CustomInput from '../Components/CustomInput';
 import CustomButton from '../Components/CustomButton';
 import {useNavigation} from '@react-navigation/native';
 import  AsyncStorage  from '@react-native-async-storage/async-storage';
-
+import { FloatingLabelInput } from 'react-native-floating-label-input';
 
 const SignInScreen = ()=> {
     const [username,setuserName] = useState('');
@@ -43,6 +43,13 @@ const SignInScreen = ()=> {
                 />
                 <CustomInput placeholder="User Name" value={username} setValue={setuserName} />
                 <CustomInput placeholder="Password" value={password} setValue={setpassword} secureTextEntry />
+                <TextInput
+                    mode="outlined"
+                    label="Email"
+                    backgroundColor = "white"
+                    placeholder="Password"
+                    style={{width:'100%'}}
+                />
                 <CustomButton text="Sign In" onPress={onSignInPressed} />
                 <CustomButton text="Forgot password ?" onPress={onForgotPasswordPressed} type="TERTIAIRY"/>
                 <CustomButton text="Don't have an account? Create one" onPress={onCreateAccountPressed} type="TERTIAIRY"/>
