@@ -111,35 +111,35 @@ class HomeScreen extends React.Component{
                 idPlant: 2,
                 customizeName: "my tulip",
                 image: "blue sky",
-                need: "vdsv",
+                need: "needs more water",
                 problem: 'water'
             },
             {
                 idPlant: 2,
                 customizeName: "my orchid",
                 image: "blue sky",
-                need: "vdsv",
+                need: "needs more sun",
                 problem: 'sun'
             },
             {
                 idPlant: 2,
                 customizeName: "my dandelion",
                 image: "blue sky",
-                need: "vdsv",
+                need: "needs more temperature",
                 problem: 'temperature'
             },
             {
                 idPlant: 2,
                 customizeName: "my dandelion",
                 image: "blue sky",
-                need: "vdsv",
+                need: "needs more picture",
                 problem: 'photo'
             },
             {
                 idPlant: 1200,
                 customizeName: "my dandelion",
                 image: "blue sky",
-                need: "vdsv",
+                need: "is in a bad health",
                 problem: 'general'
             }
         ]
@@ -151,7 +151,9 @@ class HomeScreen extends React.Component{
             <View style={styles.main_container}>
                 <Text style={styles.title_container}>Notifications :</Text>
                 {Object.entries(data).map(([key,item]) =>
-                    <NotificationItem key={key} plant={item} displayPlantHealth={this._displayPlantHealth}/>
+                    <View key={key}>
+                        <NotificationItem plant={item} displayPlantHealth={this._displayPlantHealth}/>
+                    </View>
                 )}
             </View>
         )

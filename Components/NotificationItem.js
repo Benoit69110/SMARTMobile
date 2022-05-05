@@ -14,7 +14,7 @@ const TEMPERATURE_ICON=<FontAwesome name="thermometer" size={30} color='#449C76'
 const SUN_ICON=<Ionicons name="sunny-sharp" size={30} color='#449C76'/>
 const WATER_ICON=<Ionicons name="water" size={30} color='#449C76'/>
 const WARNNING_ICON=<Ionicons name="warning" size={30} color='#449C76'/>
-const CAMERA_ICON=<EntypoIcon name="camera" size={24} color='#449C76' style={{backgroundColor:'yellow'}}/>
+const CAMERA_ICON=<EntypoIcon name="camera" size={24} color='#449C76'/>
 
 class NotificationItem extends React.Component{
     constructor(props){
@@ -27,12 +27,18 @@ class NotificationItem extends React.Component{
     }
     _getLatestImage(idPlant){
         getLatestPlantImage(idPlant).then(response=>{
-            console.log(response.request)
-            if(response.request=="Failed"){
-                this.setState({latestImage: require('../assets/plante.jpg')})
-            }else{
-                var base64Icon = 'data:image/png;base64,'+response.image.data;
-                this.setState({latestImage: base64Icon})
+            // console.log(response)
+            try{
+                // console.log(response.request)
+
+                if(response.request=="Failed"){
+                    this.setState({latestImage: require('../assets/plante.jpg')})
+                }else{
+                    var base64Icon = 'data:image/png;base64,'+response.image.data;
+                    this.setState({latestImage: base64Icon})
+                }
+            }catch(e){
+
             }
         })
     }
@@ -93,9 +99,9 @@ class NotificationItem extends React.Component{
                     }
                     <View style={{flexDirection: 'row'}}>
                         <View style={{width:'65%'}}>
-                            <Text style={{backgroundColor: 'blue'}}>{this.props.plant.customizeName}</Text>
+                            <Text>{this.props.plant.customizeName} {this.props.plant.need}</Text>
                         </View>
-                        <View style={{backgroundColor:'yellow',width:'25%',alignItems:'center'}}>
+                        <View style={{width:'25%',alignItems:'center'}}>
                             {this._displayIconProblem(this.props.plant.problem)}
 
                         </View>
