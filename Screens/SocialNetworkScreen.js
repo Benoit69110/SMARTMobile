@@ -3,15 +3,38 @@ import React from 'react'
 import {StyleSheet, ScrollView, View,Text} from 'react-native'
 import Chart from '../Components/Chart';
 
+import "react-native-gesture-handler";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
 
+import PubNub from "pubnub";
+import { PubNubProvider } from "pubnub-react";
+
+import { EmojiPickerView } from "../Components/EmojiPicker";
+import { ChatView } from "../Components/Chat";
+
+const pubnub = new PubNub({
+  subscribeKey: "sub-c-a8a8204c-cb7e-11ec-924a-fed9c56767c0",
+  publishKey: "pub-c-65b4822e-9c69-4009-9705-e4a81ede48bd",
+  uuid: "0" // changer avec le login de l'utilisateur
+});
+
+console.disableYellowBox = true;
+
+const Stack = createStackNavigator();
 
 class SettingsScreen extends React.Component{
     render(){
         return(
-        <ScrollView>
-              <Text style={styles.menu}>Friends</Text>
-              <Chart/>
-        </ScrollView>
+			<>
+			<Text style={styles.menu}>Friends</Text>
+			<PubNubProvider client={pubnub}>
+				<Stack.Navigator headerMode="none">
+				<Stack.Screen name="EmojiPicker" component={EmojiPickerView} />
+				<Stack.Screen name="Chat" component={ChatView} />
+				</Stack.Navigator>
+			</PubNubProvider>
+			</>
         )
     }
 }
