@@ -6,7 +6,6 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 
 import HomeScreen from '../Screens/HomeScreen'
-import HomeScreenLoggedIn from '../Screens/HomeScreenLoggedIn'
 import SettingsScreen from '../Screens/SettingsScreen'
 import AddPlantScreen from '../Screens/AddPlantScreen'
 import SocialNetworkScreen from '../Screens/SocialNetworkScreen'
@@ -36,13 +35,6 @@ class TabMenu extends React.Component {
                         <Tab.Screen 
                             name="Home" 
                             component={HomeScreen} 
-                            options={{
-                                tabBarIcon: ()=> HOME_ICON
-                            }}
-                        />
-                         <Tab.Screen 
-                            name="Home2" 
-                            component={HomeScreenLoggedIn} 
                             options={{
                                 tabBarIcon: ()=> HOME_ICON
                             }}

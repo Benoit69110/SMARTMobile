@@ -217,3 +217,145 @@ export function getLatestPlantImage(idPlant){
     .then((response)=>response.json())
     .catch((error)=>console.error(error))
 }
+
+export function getPlantConstantGlobal(idPlant,date){
+    console.log("Get plant constant global")
+    const data=JSON.stringify({
+        todo: 'meanGlobal',
+        idPlant: idPlant,
+        date: date
+
+    })
+    // console.log(data)
+    const url=URL
+    return fetch(
+        url,
+        {
+            method: 'post',
+            body: data,
+            headers: {
+                'Content-Type':'application/json',
+            },
+        }
+    )
+    .then((response)=>response.json())
+    .catch((error)=>console.error(error))
+}
+
+export function getPlantConstantWater(idPlant,date){
+    console.log("Get plant constant water")
+    const data=JSON.stringify({
+        todo: 'meanWater',
+        idPlant: idPlant,
+        date: date
+
+    })
+    // console.log(data)
+    const url=URL
+    return fetch(
+        url,
+        {
+            method: 'post',
+            body: data,
+            headers: {
+                'Content-Type':'application/json',
+            },
+        }
+    )
+    .then((response)=>response.json())
+    .catch((error)=>console.error(error))
+}
+
+export function getPlantConstantLight(idPlant,date){
+    console.log("Get plant constant light")
+    const data=JSON.stringify({
+        todo: 'meanLight',
+        idPlant: idPlant,
+        date: date
+
+    })
+    // console.log(data)
+    const url=URL
+    return fetch(
+        url,
+        {
+            method: 'post',
+            body: data,
+            headers: {
+                'Content-Type':'application/json',
+            },
+        }
+    )
+    .then((response)=>response.json())
+    .catch((error)=>console.error(error))
+}
+
+export function getPlantConstantTemperature(idPlant,date){
+    console.log("Get plant constant light")
+    const data=JSON.stringify({
+        todo: 'meanTemp',
+        idPlant: idPlant,
+        date: date
+
+    })
+    // console.log(data)
+    const url=URL
+    return fetch(
+        url,
+        {
+            method: 'post',
+            body: data,
+            headers: {
+                'Content-Type':'application/json',
+            },
+        }
+    )
+    .then((response)=>response.json())
+    .catch((error)=>console.error(error))
+}
+
+export function getAllAlivePlants(email){
+    console.log("Get plants alive")
+    const data=JSON.stringify({
+        todo: 'listAlivePlants',
+        userMail: email,
+    })
+    // console.log(data)
+    const url=URL
+    return fetch(
+        url,
+        {
+            method: 'post',
+            body: data,
+            headers: {
+                'Content-Type':'application/json',
+            },
+        }
+    )
+    .then((response)=>response.json())
+    .catch((error)=>console.error(error))
+
+}
+
+export function getAllDeadPlants(email){
+    console.log("Get plant dead")
+    const data=JSON.stringify({
+        todo: 'listDeadPlants',
+        userMail: email,
+    })
+    // console.log(data)
+    const url=URL
+    return fetch(
+        url,
+        {
+            method: 'post',
+            body: data,
+            headers: {
+                'Content-Type':'application/json',
+            },
+        }
+    )
+    .then((response)=>response.json())
+    .catch((error)=>console.error(error))
+
+}

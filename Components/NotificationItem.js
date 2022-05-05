@@ -99,7 +99,17 @@ class NotificationItem extends React.Component{
                     }
                     <View style={{flexDirection: 'row'}}>
                         <View style={{width:'65%'}}>
-                            <Text>{this.props.plant.customizeName} {this.props.plant.need}</Text>
+                            <Text
+                                style={{
+                                    marginLeft:10,
+                                    marginBottom:10,
+                                    color:'black',
+                                    fontSize: 15,
+                                    textAlignVertical: 'center'
+                                }}
+                            >
+                                {this.props.plant.customizeName} {this.props.plant.need}
+                            </Text>
                         </View>
                         <View style={{width:'25%',alignItems:'center'}}>
                             {this._displayIconProblem(this.props.plant.problem)}

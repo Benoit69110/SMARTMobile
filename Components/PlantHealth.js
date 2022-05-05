@@ -5,6 +5,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import Chart from './Chart'
+import { getPlantConstantGlobal, getPlantConstantLight, getPlantConstantTemperature, getPlantConstantWater } from '../API/PlantIFApi'
 
 const BEST_MOOD_ICON=<MaterialCommunityIcons 
                         name="emoticon-outline" 
@@ -18,14 +19,14 @@ const GOOD_MOOD_ICON=<MaterialCommunityIcons
                         color='#449C76'
                         style={{textAlign: 'center'}}
                     />
-const NEUTRAL_MOOD_ICON=<MaterialCommunityIcons
-                            name="emoticon-neutral-outline" 
+const BAD_MOOD_ICON=<MaterialCommunityIcons
+                            name="emoticon-sad-outline" 
                             size={50} 
                             color='#449C76'
                             style={{textAlign: 'center'}}
                         />
-const BAD_MOOD_ICON=<MaterialCommunityIcons 
-                        name="emoticon-sad-outline" 
+const DEAD_MOOD_ICON=<MaterialCommunityIcons 
+                        name="emoticon-dead-outline" 
                         size={50} 
                         color='#449C76'
                         style={{textAlign: 'center'}}
@@ -34,16 +35,30 @@ const BAD_MOOD_ICON=<MaterialCommunityIcons
 const THERMOMETER_ICON=<FontAwesome name="thermometer" size={30} color='#449C76'/>
 const LIGHT_ICON=<Ionicons name="sunny-sharp" size={30} color='#449C76'/>
 const WATER_ICON=<Ionicons name="water" size={30} color='#449C76'/>
+const GLOBAL_ICON=<MaterialCommunityIcons name="cards-heart" size={30} color='#449C76'/>
+
 
 
 class PlantHealth extends React.Component{
     constructor(props){
         super(props)
-        this.state = {healthPlant : {}}
-        this.globalHealth=0
+        this.state = {
+            idPlant: 2,
+            globalMean: 10,
+            tempMean: 10,
+            waterMean: 10,
+            lightMean: 10,
+
+        }
+        this.date = new Date()
+        this.date = this.date.getDate()+'/'+(this.date.getMonth()+1)+'/'+this.date.getFullYear()
+        console.log("current date",this.date)
+        
     }
 
     componentDidMount(){
+        this._getConstant()
+        
         this.setState({healthPlant:
             {
                 name: "Tulip",
@@ -51,7 +66,7 @@ class PlantHealth extends React.Component{
                 climate: "Hot",
                 aromatics: "no idea",
                 plant_image: require('../assets/plante.jpg'),
-                plant_id: 1200,
+                plant_id: 2,
                 temperature : 20,
                 humidity: 7,
                 sun: 3,
@@ -59,11 +74,33 @@ class PlantHealth extends React.Component{
             }
         })
     }
+    _getInfosAboutConstants(){
+        this._getInfoAboutConstant("water",this.state.waterMean)
+        this._getInfoAboutConstant("light",this.state.waterMean)
+        this._getInfoAboutConstant("heat",this.state.waterMean)
+    }
+    _getInfoAboutConstant(constantType,value){
+        var msg=""
+        if(Math.abs(value)<=12){
+            msg ="Your plant needs "
+            if(value<0){
+                msg+="more "
+            }else{
+                msg+="less "
+            }
+            msg+=constantType+" !"
+        }else{
+            msg=""
+        }
+        return msg
+    }
+
     _checkConstant(value){
+        value=Math.abs(value)
         if(value<5){
-            return BAD_MOOD_ICON
+            return DEAD_MOOD_ICON
         }else if(value>=5 && value<10){
-            return NEUTRAL_MOOD_ICON
+            return BAD_MOOD_ICON
         }else if(value>=10 && value<15){
             return GOOD_MOOD_ICON
         }else if(value>=15){
@@ -71,6 +108,20 @@ class PlantHealth extends React.Component{
         }
     }
 
+    _getConstant(){
+        getPlantConstantGlobal(this.state.idPlant,this.date).then(data=>{
+            this.setState({globalMean: data.globalMark})
+        })
+        getPlantConstantWater(this.state.idPlant,this.date).then(data=>{
+            this.setState({waterMean: data.waterMark})
+        })
+        getPlantConstantLight(this.state.idPlant,this.date).then(data=>{
+            this.setState({lightMean: data.lightMark})
+        })
+        getPlantConstantTemperature(this.state.idPlant,this.date).then(data=>{
+            this.setState({tempMean: data.tempMark})
+        })
+    }
     _displayConstant(){
         return (
             <View style={styles.main_container}>
@@ -80,17 +131,18 @@ class PlantHealth extends React.Component{
                 <View style={[styles.constant_container, {borderBottomWidth: 1}]}>
                     <View style={[styles.constant_detail_container, {borderRightWidth: 1}]}>
                        <View style={{flexDirection: 'row'}}>
-                           {THERMOMETER_ICON}
+                           {GLOBAL_ICON}
                            <Text style={styles.constant_text}>Global</Text>
                        </View>
-                        {this._checkConstant(this.state.healthPlant.global)}
+                        {this._checkConstant(this.state.globalMean)}
                     </View>
                     <View style={[styles.constant_detail_container]}>
                         <View style={{flexDirection: 'row'}}>
                            {WATER_ICON}
                            <Text style={styles.constant_text}>Humidity</Text>
                        </View>
-                       {this._checkConstant(this.state.healthPlant.humidity)}
+                       {this._checkConstant(this.state.waterMean)}
+                       <Text style={styles.constant_text}>{this._getInfoAboutConstant("water",this.state.waterMean)}</Text>
                     </View>
                 </View>
                 <View style={styles.constant_container}>
@@ -99,14 +151,16 @@ class PlantHealth extends React.Component{
                            {LIGHT_ICON}
                            <Text style={styles.constant_text}>Sun</Text>
                        </View>
-                       {this._checkConstant(this.state.healthPlant.sun)}
+                       {this._checkConstant(this.state.lightMean)}
+                       <Text style={styles.constant_text}>{this._getInfoAboutConstant("light",this.state.lightMean)}</Text>
                     </View>
                     <View style={[styles.constant_detail_container,]}>
                        <View style={{flexDirection: 'row'}}>
                            {THERMOMETER_ICON}
                            <Text style={styles.constant_text}>Temperature</Text>
                        </View>
-                        {this._checkConstant(this.state.healthPlant.temperature)}
+                        {this._checkConstant(this.state.tempMean)}
+                       <Text style={styles.constant_text}>{this._getInfoAboutConstant("heat",this.state.tempMean)}</Text>
                     </View>
                 </View>
             </View>
@@ -197,8 +251,7 @@ class PlantHealth extends React.Component{
         console.log("Display profile of plant with id " + idPlant)
         this.props.navigation.navigate("PlantProfile",{idPlant: idPlant})
     }
-    render(){
-        
+    render(){        
         return(
         <ScrollView>
             <View style={styles.main_container}>

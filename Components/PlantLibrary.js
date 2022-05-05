@@ -1,31 +1,39 @@
 import * as React from 'react';
 import {ScrollView, FlatList, Image, StyleSheet, View,Text} from 'react-native'
+import { getAllAlivePlants, getAllDeadPlants } from '../API/PlantIFApi';
 import PlantItem from './PlantItem'
 
 class PlantLibrary extends React.Component{
     constructor(props){
-      super(props)
+        super(props)
+        this.state={
+            alivePlants:[],
+            deadPlants: []
+        }
+    }
+    componentDidMount(){
+        this._getAllAlivePlants()
+        this._getAllDeadPlants()
     }
     _displayPlantHealth=(idPlant)=>{
         console.log("Display plant with id " + idPlant)
         this.props.navigation.navigate("PlantHealth",{idPlant: idPlant})
     }
 
-    _getRecentAddedPlant(){
-        console.log("Request recent added plant to Plant'IF API")
-        const res=[
-            {image: require('../assets/plante.jpg'), id: 2,name:'my dandelion'}
-         ]
-        return res
+    _getAllAlivePlants(){
+        console.log("Request all plant alive to Plant'IF API")
+        getAllAlivePlants("bal@gmail.com").then(response=>{
+            console.log("res==",response.library)
+            this.setState({alivePlants:response.library})
+        })
     }
 
-    _getAllPlants(){
-        console.log("Request all plants to Plant'IF API")
-        const res=[
-            {image: require('../assets/fleur.jpg'), id: 2,name:'my dandelion'},
-            {image: require('../assets/plante.jpg'), id: 1300,name:'my tulip'}
-        ]
-        return res
+    _getAllDeadPlants(){
+        console.log("Request all plants dead to Plant'IF API")
+        getAllDeadPlants("bal@gmail.com").then(response=>{
+            console.log("res==",response.library)
+            this.setState({deadPlants:response.library})
+        })
     }
 
 
@@ -33,21 +41,23 @@ class PlantLibrary extends React.Component{
         return (
             <View style={styles.main_container}>
                 <Text style={styles.title_container}>
-                    {param=='all' ? 'All of your plants :' : 'Recently added plants :'}
+                    {param=='alive' ? 'All of your alive plants :' : 'All of your dead plants :'}
                 </Text>
                 <FlatList
                     horizontal={true}
                     showsHorizontalScrollIndicator={true}
-                    data={param=='all' ? 
-                            this._getAllPlants() 
+                    data={param=='alive' ? 
+                            this.state.alivePlants 
                         : 
-                            this._getRecentAddedPlant()
+                            this.state.deadPlants
                         }
                     renderItem={ ({item}) => <PlantItem 
                                                 plant={item} 
                                                 displayPlantHealth={this._displayPlantHealth}
                                             />}
                 />
+                {param=='alive' && this.state.alivePlants.length ==0 ? <Text style={styles.text}>You don't have any alive plant</Text>:null}
+                {param!='alive' && this.state.deadPlants.length ==0 ? <Text style={styles.text}>You don't have any dead plant</Text>:null}
             </View>
         )
     }
@@ -62,8 +72,8 @@ class PlantLibrary extends React.Component{
                     </Text>
                 </View>
 
-                {this._displayPlants('recent')}
-                {this._displayPlants('all')}
+                {this._displayPlants('alive')}
+                {this._displayPlants('dead')}
                 
                      
             </ScrollView>
@@ -96,11 +106,7 @@ const styles = StyleSheet.create({
     text: {
             marginTop: 16,
             paddingVertical: 8,
-            borderWidth: 4,
-            width: 400,
-            borderColor: "#20232a",
             borderRadius: 6,
-            backgroundColor: "#8fbc8f",
             color: "#20232a",
             textAlign: "center",
             fontSize: 15,
