@@ -1,11 +1,12 @@
 import React, {useState} from 'react';
-import { View,Text,Image,StyleSheet,useWindowDimensions,ScrollView } from 'react-native';
+import { View,Text,Image,StyleSheet,useWindowDimensions,ScrollView,Alert } from 'react-native';
 import Logo from '../assets/Logo_1.png';
 import CustomInput from '../Components/CustomInput';
 import CustomButton from '../Components/CustomButton';
 import {useNavigation} from '@react-navigation/native';
 import  AsyncStorage  from '@react-native-async-storage/async-storage';
 import { registerUser } from '../API/PlantIFApi';
+import { validateEmail } from '../Helpers/Validator';
 
 
 const SignUpScreen = ()=> {
@@ -20,18 +21,56 @@ const SignUpScreen = ()=> {
 
     const onRegisterPressed = () =>{
         console.warn("onRegisterPressed");
-            navigation.navigate('TabMenu');
-        var infosUser={
-            todo: "newUser",
-            name: username,
-            mail: email,
-            password: password
-        }
-        registerUser(infosUser).then(result=>{
-            console.log(result)
-            AsyncStorage.setItem('token', username);
 
-        })
+        if(email=="" || username=="" || password == "" || passwordRepeat== ""){
+            Alert.alert(
+                "Error",
+                "Some fields are empty.",
+                [{
+                    text: "Ok",
+                }]
+            )
+        }else if(!validateEmail(email)){
+            Alert.alert(
+                "Error",
+                "Check the format of your email.",
+                [{
+                    text: "Ok",
+                }]
+            )
+        }else if(password!=passwordRepeat){
+            Alert.alert(
+                "Error",
+                "The repeat password is not equal to your password.",
+                [{
+                    text: "Ok",
+                }]
+            )
+        }else{
+            var infosUser={
+                todo: "newUser",
+                name: username,
+                mail: email,
+                password: password
+            }
+            registerUser(infosUser).then(response=>{
+                console.log(response)
+                if(response["connexion"]){
+                    var pseudo=username.split('@')[0]
+                    AsyncStorage.setItem('token', pseudo);
+                    navigation.navigate('TabMenu');
+                }else{
+                    Alert.alert(
+                        "Error",
+                        "An error occurred... Please try later !",
+                        [{
+                            text: "Ok",
+                        }]
+                    )
+                }
+            })
+        }
+
     };
 
 

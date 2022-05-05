@@ -14,7 +14,7 @@ class PlantLibrary extends React.Component{
     _getRecentAddedPlant(){
         console.log("Request recent added plant to Plant'IF API")
         const res=[
-            {image: require('../assets/plante.jpg'), id: 1200}
+            {image: require('../assets/plante.jpg'), id: 2,name:'my dandelion'}
          ]
         return res
     }
@@ -22,8 +22,8 @@ class PlantLibrary extends React.Component{
     _getAllPlants(){
         console.log("Request all plants to Plant'IF API")
         const res=[
-            {image: require('../assets/fleur.jpg'), id: 1230},
-            {image: require('../assets/plante.jpg'), id: 1300}
+            {image: require('../assets/fleur.jpg'), id: 2,name:'my dandelion'},
+            {image: require('../assets/plante.jpg'), id: 1300,name:'my tulip'}
         ]
         return res
     }

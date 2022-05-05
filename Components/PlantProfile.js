@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {ScrollView, ActivityIndicator, TextInput, StyleSheet, View,Text,Button,Switch,Alert} from 'react-native'
 // import {Switch} from 'react-native-switch'
-import { getProfilePlant, getNeedsPlant, addPlant } from '../API/PlantIFApi';
+import { getProfilePlant, getNeedsPlant, addPlant, getPlant } from '../API/PlantIFApi';
 import { isZipCode } from '../Helpers/Validator';
 
 const PLANT_INFOS=[
@@ -97,6 +97,7 @@ class PlantProfile extends React.Component{
             editable: true
         }
         this.idPlant=this.props.route.params.idPlant
+        this._getPlant()
         
     }
 
@@ -219,6 +220,11 @@ class PlantProfile extends React.Component{
         this.setState({needs: newInfos})
     }
 
+    _getPlant(){
+        getPlant(this.idPlant).then(response=>{
+            console.log(response)
+        })
+    }
     _getProfilePlant(){
         getProfilePlant(this.idPlant).then(data=> {
             // console.log(data)
@@ -272,6 +278,17 @@ class PlantProfile extends React.Component{
     
     _reportDeath(){
         console.log("My plant is dead")
+        Alert.alert(
+            "Warning : This action is irrevocable !",
+            "Is your plant really dead ?",
+            [{
+                text: "No",
+            },
+            {
+                text: "Yes",
+                onPress:() => console.log("Yes Pressed"),
+            }]
+        )
     }
     _modifyPlant(){
         console.log("Modification of my plant")
@@ -296,13 +313,13 @@ class PlantProfile extends React.Component{
             title=title.charAt(0).toLowerCase() + title.slice(1)
             needsArray.needs[title]=item.value
         }
-        var completeArray={todo: "addPlant"}
+        var completeArray={todo: "updatePlant",idPlant: 3}
         completeArray={...completeArray,...profileArray}
         completeArray={...completeArray,...needsArray}
         console.log(completeArray)
         var res=this._checkProfileFields()
         if(res==0){
-            console.log("Add the plant to the library if every field are completed")
+            console.log("Update the plant to the library if every field are completed")
             var added=1
             addPlant(completeArray).then(result=>{
                 console.log("result add plant",result)
@@ -310,7 +327,7 @@ class PlantProfile extends React.Component{
             if(added==0){
                 Alert.alert(
                     "Error",
-                    "An error occurred... Your plant hasn't been added to your library.",
+                    "An error occurred... Your plant hasn't been modified.",
                     [{
                         text: "Ok",
                     }]
@@ -318,7 +335,7 @@ class PlantProfile extends React.Component{
             }else{
                 Alert.alert(
                     "Success !",
-                    "Congratulations ! Your plant has been successfully added to your library.",
+                    "Congratulations ! Your plant has been successfully modified.",
                     [{
                         text: "Ok",
                     }]
@@ -380,7 +397,7 @@ class PlantProfile extends React.Component{
                 <View style={styles.main_container}>
                     <Button
                         title="Modify my plant"
-                        onPress={()=>this.setState({editable: true})}
+                        onPress={()=>this.setState({editable: !this.state.editable})}
                     />
                 </View>
                 {this._profilePlant()}

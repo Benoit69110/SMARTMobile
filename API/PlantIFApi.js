@@ -1,7 +1,6 @@
 const URL="http://192.168.43.200/SMARTweb/ActionServlet"
 
 export function addPlant(plantInfos){
-    registerUser({})
     console.log("Add a plant with API")
     const data=JSON.stringify(plantInfos)
     console.log("data sent",data)
@@ -14,17 +13,8 @@ export function addPlant(plantInfos){
                 },
             }
         )
-        .then((response)=>response.text())
+        .then((response)=>response.json())
         .catch((error)=>console.error(error))
-
-
-    // var res = Math.random();
-    // if (res <= 0.5){
-    //     res=0
-    // }else{
-    //     res= 1
-    // }
-    // return res;
 }
 
 export function registerUser(userInfos){
@@ -32,7 +22,7 @@ export function registerUser(userInfos){
     //     todo: "newUser",
     //     mail: "@mail3",
     //     password: "fieldPassword2",
-    //     address: "fieldAddress2",
+    //     address: "fieldAddress2", 
     //     name: "fieldName2"
     // }
     console.log("Register a user with API")
@@ -94,7 +84,28 @@ export function testApi(){
 
 }
 
-export function getProfilePlant(arduinoNumber){
+export function getPlant(idPlant){
+    console.log("Get plant info the API")
+    const data=JSON.stringify({
+        todo: "getPlant",
+        plantId: idPlant
+    })
+    console.log("data sent",data)
+    return fetch(URL,
+            {
+                method: 'POST',
+                body: data,
+                headers: {
+                    'Content-Type':'application/json',
+                },
+            }
+        )
+        .then((response)=>response.json())
+        .catch((error)=>console.error(error))
+}
+
+
+export function getProfilePlant(idPlant){
     return fetch("https://www.data.qld.gov.au/api/3/action/datastore_search?resource_id=fd297d03-bf72-40c7-b27e-24cc7023360c",
         // {
         //     method: 'POST',
@@ -116,7 +127,7 @@ export function getProfilePlant(arduinoNumber){
     .catch((error)=>console.error(error))
 }
 
-export function getNeedsPlant(arduinoNumber){
+export function getNeedsPlant(idPlant){
     return fetch("https://www.data.qld.gov.au/api/3/action/datastore_search?resource_id=fd297d03-bf72-40c7-b27e-24cc7023360c",
         // {
         //     method: 'POST',
@@ -140,13 +151,58 @@ export function addImageToPlant(urn,idPlant){
     console.log("Add image to plant")
     var img=urn.assets[0]
     var type=img.type
+    type=type.split('/')[1]
     const data=JSON.stringify({
         todo: 'addImage',
-        plantId: 4,
+        plantId: idPlant,
         type: img.type,
         image: img.base64
     })
-    console.log(data)
+    // console.log(data)
+    const url=URL
+    return fetch(
+        url,
+        {
+            method: 'post',
+            body: data,
+            headers: {
+                'Content-Type':'application/json',
+            },
+        }
+    )
+    .then((response)=>response.json())
+    .catch((error)=>console.error(error))
+}
+
+export function getPlantImage(idPlant){
+    console.log("Get image of a plant")
+    const data=JSON.stringify({
+        todo: 'getImage',
+        plantId: idPlant,
+    })
+    // console.log(data)
+    const url=URL
+    return fetch(
+        url,
+        {
+            method: 'post',
+            body: data,
+            headers: {
+                'Content-Type':'application/json',
+            },
+        }
+    )
+    .then((response)=>response.json())
+    .catch((error)=>console.error(error))
+}
+
+export function getLatestPlantImage(idPlant){
+    console.log("Get Latest image of a plant")
+    const data=JSON.stringify({
+        todo: 'getLatestImages',
+        plantId: idPlant,
+    })
+    // console.log(data)
     const url=URL
     return fetch(
         url,

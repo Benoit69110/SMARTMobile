@@ -3,8 +3,12 @@ import React from 'react'
 import {ScrollView, FlatList,StyleSheet, View,Text, TouchableOpacity,Image} from 'react-native'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
-import { testApi } from '../API/PlantIFApi';
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import EntypoIcon from 'react-native-vector-icons/Entypo'
+import { getLatestPlantImage, getPlantImage, testApi } from '../API/PlantIFApi';
 import {getUserPseudo} from '../Helpers/GetPseudo';
+import { getLatestImage } from '../Helpers/GetLatestImage'
+import NotificationItem from '../Components/NotificationItem'
 
 
 const HOME_ICON=<FontAwesome name="home" size={25} color='#449C76'/>
@@ -13,6 +17,13 @@ const ADD_ICON=<MaterialIcons name="add-circle" size={25} color='#449C76'/>
 const NETWORK_ICON=<MaterialIcons name="group" size={25} color='#449C76'/>
 const PROFILE_ICON=<MaterialIcons name="account-circle" size={25} color='#449C76'/>
 const DOWN_ICON=<FontAwesome name="angle-down" size={25} color='#449C76'/>
+
+const TEMPERATURE_ICON=<FontAwesome name="thermometer" size={30} color='#449C76'/>
+const SUN_ICON=<Ionicons name="sunny-sharp" size={30} color='#449C76'/>
+const WATER_ICON=<Ionicons name="water" size={30} color='#449C76'/>
+const WARNNING_ICON=<Ionicons name="warning" size={30} color='#449C76'/>
+const CAMERA_ICON=<EntypoIcon name="camera" size={24} color='#449C76' style={{backgroundColor:'yellow'}}/>
+
 
 const TUTORIAL={
     home:{
@@ -47,14 +58,15 @@ class HomeScreen extends React.Component{
         super(props)
         this.state={
             showTutorial: false,
-            pseudo: ""
+            pseudo: "",
+            latestImage: undefined
         }
         
         getUserPseudo().then(data=>{
             this.setState({pseudo:data})
         })
+        // this._getLatestImage(2)
     }
-
 
 
     _displayTutorial(){
@@ -74,138 +86,78 @@ class HomeScreen extends React.Component{
         this.props.navigation.navigate("PlantHealth",{idPlant: idPlant})
     }
 
-    /*_displayProblem(problem){
+    _displayIconProblem(problem){
         switch(problem){
-            case 'less-water':
-                return {
-                    icon: WATER_ICON,
-                    msg: "Your plant needs less water !"
-                }
+            case 'water':
+                return WATER_ICON
                 break
-            case 'more-water':
-                return {
-                    icon: WATER_ICON,
-                    msg: "Your plant needs more water !"
-                }
+            case 'sun':
+                return SUN_ICON
                 break
-            case 'less-sun':
-                return {
-                    icon: SUN_ICON,
-                    msg: "Your plant needs less light !"
-                }
-                break
-            case 'more-sun':
-                return {
-                    icon: SUN_ICON,
-                    msg: "Your plant needs more light !"
-                }
-                break
-            case 'less-temperature':
-                return {
-                    icon: TEMPERATURE_ICON,
-                    msg: "Your plant is too hot !"
-                }
-                break
-            case 'more-temperature':
-                return {
-                    icon: TEMPERATURE_ICON,
-                    msg: "Your plant is too cold !"
-                }
+            case 'temperature':
+                return TEMPERATURE_ICON
                 break
             case 'photo':
-                return {
-                    icon: TEMPERATURE_ICON,
-                    msg: "You haven't taken a picture of your plant for a long time ! Take the time to do one"
-                }
+                return CAMERA_ICON
                 break
             default:
-                return {
-                    icon: WARNNING_ICON,
-                    msg: "Your plant has a problem, check its health book !"
-                }
+                return WARNNING_ICON
                 break
         }
-    }*/
+    }
     _displayNotifications(){
         var data=[
             {
-                arduinoNumber: 1400,
+                idPlant: 2,
                 customizeName: "my tulip",
                 image: "blue sky",
                 need: "vdsv",
-                problem: 'more-water'
+                problem: 'water'
             },
             {
-                arduinoNumber: 1300,
+                idPlant: 2,
                 customizeName: "my orchid",
                 image: "blue sky",
                 need: "vdsv",
-                problem: 'less-sun'
+                problem: 'sun'
             },
             {
-                arduinoNumber: 1200,
+                idPlant: 2,
                 customizeName: "my dandelion",
                 image: "blue sky",
                 need: "vdsv",
-                problem: 'more-temperature'
+                problem: 'temperature'
+            },
+            {
+                idPlant: 2,
+                customizeName: "my dandelion",
+                image: "blue sky",
+                need: "vdsv",
+                problem: 'photo'
+            },
+            {
+                idPlant: 1200,
+                customizeName: "my dandelion",
+                image: "blue sky",
+                need: "vdsv",
+                problem: 'general'
             }
         ]
+        // Object.entries(data).map(([key,item]) =>
+        //     this._getLatestImage(item.idPlant)
+        // )
+        // console.log("res",this.state.latestImage)
         return(
             <View style={styles.main_container}>
                 <Text style={styles.title_container}>Notifications :</Text>
                 {Object.entries(data).map(([key,item]) =>
-                    <View key={key} style={{flexDirection: 'row'}}>
-                        <TouchableOpacity
-                            onPress={()=>this._displayPlantHealth(item.arduinoNumber)}
-                        >
-                            <Text>{item.customizeName}</Text>
-                            {/* {this._displayProblem(item.problem)} */}
-                        </TouchableOpacity>
-                    </View>
+                    <NotificationItem key={key} plant={item} displayPlantHealth={this._displayPlantHealth}/>
                 )}
-                {/* <FlatList
-                    horizontal={true}
-                    showsHorizontalScrollIndicator={true}
-                    // au lieu d'avoir le tableau json data on aura la réponse du back et il suffira de prendre les données, il nous faudra l'id de la plante, la photo et les notifications associées et aussi une catégorie pour afficher un icone?
-                    data={[
-                        {key: require('../assets/plante.jpg'), id: 1200, notification : 'Your plant needs more water!', topic: 'water' }
-                    ]}
-                    // Touchable permet de rendre l'élement cliquable, quand on clique dessus on aura direct accès au carnet de santé de la plante
-                    renderItem={ ({ item, index }) => (
-                        <TouchableOpacity onPress={() => this.props.navigation.navigate('Plant Health',{plant_id: item.id})}>
-                            <View style={styles.notification}>
-                                <Image source={item.key}
-                                    key={index}
-                                    style={{
-                                        marginLeft: -170,
-                                        width: 150,
-                                        height: 150,
-                                        borderRadius: 200/2,
-                                        borderColor:'#aba8c8'
-                                    }}
-                                />
-                                    <Image source={require('../assets/eau.png')}
-                                            key={'icon'}
-                                            style={{
-                                                marginTop: -130,
-                                                marginLeft: 70,
-                                                width: 40,
-                                                height: 40,
-                                                borderRadius: 200/2,
-                                                borderColor:'#aba8c8'
-                                            }}
-                                            />
-                                <Text style = {{ marginTop: 10, fontSize: 15, marginLeft: 10}}> {item.notification} </Text>
-                            </View>
-                        </TouchableOpacity>
-                    )}
-                /> */}
             </View>
-            
         )
-
     }
-    render(){
+    
+    render(){        
         return(
         <ScrollView>
             <Text style={styles.menu}>Home</Text>
