@@ -1,11 +1,14 @@
 import React, {useState} from 'react';
-import { View,Text,Image,StyleSheet,useWindowDimensions,ScrollView,TextInput } from 'react-native';
+import { View,Text,Image,StyleSheet,useWindowDimensions,ScrollView,Alert,TextInput } from 'react-native';
+
 import Logo from '../assets/Logo_2.png';
 import CustomInput from '../Components/CustomInput';
 import CustomButton from '../Components/CustomButton';
 import {useNavigation} from '@react-navigation/native';
 import  AsyncStorage  from '@react-native-async-storage/async-storage';
-import { FloatingLabelInput } from 'react-native-floating-label-input';
+import { signInUser } from '../API/PlantIFApi';
+import { validateEmail } from '../Helpers/Validator';
+
 
 const SignInScreen = ()=> {
     const [username,setuserName] = useState('');
@@ -18,9 +21,42 @@ const SignInScreen = ()=> {
     const onSignInPressed = () =>{
         console.warn("Sign in");
         // Validate user
-
-        AsyncStorage.setItem('token', username);
-        navigation.navigate('TabMenu');
+        if(username == "" && password== ""){
+            Alert.alert(
+                "Error",
+                "Username or password is empty.",
+                [{
+                    text: "Ok",
+                }]
+            )
+        }else if(!validateEmail(username)){
+            Alert.alert(
+                "Error",
+                "Check the format of your email.",
+                [{
+                    text: "Ok",
+                }]
+            )
+        }else{
+            signInUser(username,password).then(response=>{
+                console.log(response.connexion)
+                if(response["connexion"]){
+                    var pseudo=username.split('@')[0]
+                    AsyncStorage.setItem('token', pseudo);
+                    navigation.navigate('TabMenu');
+                }else{
+                    Alert.alert(
+                        "Error",
+                        "Username or password is invalid.",
+                        [{
+                            text: "Ok",
+                        }]
+                    )
+                }
+            })
+        }
+        
+        
     };
 
     const onForgotPasswordPressed = () =>{

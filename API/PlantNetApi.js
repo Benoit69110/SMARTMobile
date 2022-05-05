@@ -19,6 +19,7 @@ export function getPlantsFromApiWithPicture(urn){
         type: img.type,
         name: img.fileName
     })
+    console.log(formdata._parts)
     const url=URL+API_TOKEN+"&include-related-images=true&no-reject=false"
     return fetch(
         url,
