@@ -20,6 +20,7 @@ const SignUpScreen = ()=> {
 
     const onRegisterPressed = () =>{
         console.warn("onRegisterPressed");
+            navigation.navigate('TabMenu');
         var infosUser={
             todo: "newUser",
             name: username,
@@ -28,8 +29,8 @@ const SignUpScreen = ()=> {
         }
         registerUser(infosUser).then(result=>{
             console.log(result)
-            // AsyncStorage.setItem('token', username);
-            // navigation.navigate('TabMenu');
+            AsyncStorage.setItem('token', username);
+
         })
     };
 

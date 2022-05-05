@@ -1,4 +1,4 @@
-const URL="http://10.0.2.2:8080/SMARTweb/ActionServlet"
+const URL="http://192.168.43.200/SMARTweb/ActionServlet"
 
 export function addPlant(plantInfos){
     registerUser({})
@@ -234,82 +234,6 @@ export function getAlivePlantLibrary(mail){
     ]
     return (markers);
 }
-
-export function getVisiblePlants(mail){
-    console.log("Get visible plants")
-
-     /*const url="http://192.168.020/ActionServlet"
-     return fetch(
-         url,
-         {
-            method: 'post',
-            data: {
-               todo: "listAlivePlants",
-               userMail: mail
-            },
-             headers: {
-                 'Content-Type':'application/json',
-             },
-         }
-     )
-     .then((response)=>response.json())
-     .catch((error)=>console.error(error))*/
-
-
-    /*var res = Math.random();
-    if (res <= 0.5){
-        res=0
-    }else{
-        res= 1
-    }
-    return res;*/
-    markers = [
-         {
-           key: "Hi",
-           latlng:  {
-                latitude: 37.6,
-                longitude: -122,
-                latituteDelta: 0.01,
-                longitudeDelta: 0.01
-           },
-           title: "Mayarachide",
-           type_plante: "Orchidée",
-           photo: "../assets/plante.jpg",
-           humeur: "Happy",
-           isAlive: "yes"
-         },
-         {
-            key: "Hii",
-            latlng:  {
-                latitude: 37.8,
-                longitude: -122,
-                latituteDelta: 0.02,
-                longitudeDelta: 0.01
-            },
-            title: "Benoit le renoi",
-            type_plante: "Orchidée",
-            photo: '../assets/fleur.jpg',
-            humeur: "Dead",
-            isAlive: "no"
-         },
-         {
-           key: "Hiii",
-           latlng:  {
-                latitude: 45.771944,
-                longitude: 4.8,
-                latituteDelta: 0.01,
-                longitudeDelta: 0.01
-           },
-            title: "Hello",
-            type_plante: "Rose rouge",
-            photo: "../assets/plant.jpg",
-            humeur: "Sad",
-            isAlive: "yes"
-         },
-       ]
-    return (markers);
-}
-
 
 export function getVisiblePlants(mail){
     console.log("Get visible plants")
