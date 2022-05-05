@@ -27,7 +27,7 @@ class SettingsScreen extends React.Component{
     render(){
         return(
 			<>
-			<Text style={styles.menu}>Friends</Text>
+			<Text style={styles.menu}>Chat Room</Text>
 			<PubNubProvider client={pubnub}>
 				<Stack.Navigator headerMode="none">
 				<Stack.Screen name="EmojiPicker" component={EmojiPickerView} />

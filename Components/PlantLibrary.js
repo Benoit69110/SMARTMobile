@@ -56,8 +56,8 @@ class PlantLibrary extends React.Component{
                                                 displayPlantHealth={this._displayPlantHealth}
                                             />}
                 />
-                {param=='alive' && this.state.alivePlants.length ==0 ? <Text style={styles.text}>You don't have any alive plant</Text>:null}
-                {param!='alive' && this.state.deadPlants.length ==0 ? <Text style={styles.text}>You don't have any dead plant</Text>:null}
+               {param=='alive'  ? <Text style={styles.text}>You don't have any alive plant</Text>:null}
+                {param!='alive'  ? <Text style={styles.text}>You don't have any dead plant</Text>:null}
             </View>
         )
     }
