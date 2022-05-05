@@ -5,6 +5,8 @@ import  AsyncStorage  from '@react-native-async-storage/async-storage';
 import RNRestart from 'react-native-restart';
 import {useNavigation} from '@react-navigation/native';
 import SignInScreen from './SignInScreen';
+import { modifyUser } from '../API/PlantIFApi';
+import { getUser } from '../API/PlantIFApi';
 
 import {
   StyleSheet,
@@ -20,7 +22,38 @@ import {
 export default class Profile extends Component {
 
   state = {
-    username: ''
+    username: '',
+    mail:'',
+    newPassword:'',
+    RNewPassword:'',
+    currentPassword: ''
+  }
+
+
+  executeOnLoad = async () => {
+    console.warn("view has loaded!");
+    const mail =  await AsyncStorage.getItem('mail');
+    console.warn("mail = "+mail);
+    getUser(mail).then(response=>{
+      console.log(response.connexion)
+      if(response["request"]){
+          Alert.alert(
+            "Modify User",
+            "informations has been modified.",
+            [{
+                text: "Ok",
+            }]
+          )
+      }else{
+          Alert.alert(
+              "Error",
+              "Password is invalid.",
+              [{
+                  text: "Ok",
+              }]
+          )
+      }
+    });
   }
 
   onDisconnectPressed = async ()=>{
@@ -32,9 +65,37 @@ export default class Profile extends Component {
     //navigation.navigate('SignIn');
   }
 
+
   onUpdateProfilePressed = async ()=>{
+    if(this.state.newPassword !== this.state.RNewPassword){
+      console.warn("Password does not match");
+    }else{
+      console.warn("Password does not match");
+        modifyUser(this.state.userName,this.state.mail,this.state.newPassword,this.state.currentPassword).then(response=>{
+          console.log(response.connexion)
+          if(response["request"]){
+            this.setState({ username: response["username"] })
+            this.setState({ mail: response["mail"] })
+              Alert.alert(
+                "Load User",
+                "informations has been loaded.",
+                [{
+                    text: "Ok",
+                }]
+              )
+          }else{
+              Alert.alert(
+                  "Error",
+                  "informations has not been loaded.",
+                  [{
+                      text: "Ok",
+                  }]
+              )
+          }
+      })
+    }
     //const navigation = useNavigation();
-    console.warn("username = "+this.state.username)
+    
     //navigation.navigate('SignIn');
   }
 
@@ -55,7 +116,7 @@ export default class Profile extends Component {
   render() {
     return (
       <ScrollView showVerticalScrollIndicator={false}>
-      <View style={styles.container}>
+      <View style={styles.container} onLayout={this.executeOnLoad()} >
           <View style={styles.header}></View>
           <Image style={styles.avatar} source={avatar}/>
           <View style={styles.body}>
@@ -65,6 +126,7 @@ export default class Profile extends Component {
             <TextInput
               style={styles.input}
               placeholder="UserName"
+              value={username}
               onChangeText={(text) => this.setState({ username: text })}
             />
 
@@ -72,22 +134,27 @@ export default class Profile extends Component {
             <TextInput
               style={styles.input}
               placeholder="Mail@gmail.com"
+              value={mail}
+              onChangeText={(text) => this.setState({ mail: text })}
             />
 
             <TextInput
               style={styles.input}
               placeholder="New Password"
+              onChangeText={(text) => this.setState({ newPassword: text })}
             />
 
             <TextInput
               style={styles.input}
               placeholder="Re-type the new password"
+              onChangeText={(text) => this.setState({ RNewPassword: text })}
             />
 
 
             <TextInput
               style={styles.input}
               placeholder="Enter your current password"
+              onChangeText={(text) => this.setState({ currentPassword: text })}
             />
 
             

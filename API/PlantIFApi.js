@@ -41,6 +41,50 @@ export function registerUser(userInfos){
         .catch((error)=>console.error(error))
 }
 
+export function modifyUser(userName,mail,newPassword,currentPassword){
+    console.log("Mofify with the API")
+    const data=JSON.stringify({
+        todo: "modifyUser",
+        mail: login,
+        userName: userName,
+        newPassword: newPassword,
+        currentPassword: currentPassword
+    })
+    console.log("data sent",data)
+    return fetch(URL,
+            {
+                method: 'POST',
+                body: data,
+                headers: {
+                    'Content-Type':'application/json',
+                },
+            }
+        )
+        .then((response)=>response.json())
+        .catch((error)=>console.error(error))
+}
+
+export function getUser(mail){
+    console.log("Mofify with the API")
+    const data=JSON.stringify({
+        todo: "getUser",
+        mail: mail
+    })
+    console.log("data sent",data)
+    return fetch(URL,
+            {
+                method: 'POST',
+                body: data,
+                headers: {
+                    'Content-Type':'application/json',
+                },
+            }
+        )
+        .then((response)=>response.json())
+        .catch((error)=>console.error(error))
+}
+
+
 export function signInUser(login,password){
     console.log("Sign in with the API")
     const data=JSON.stringify({
