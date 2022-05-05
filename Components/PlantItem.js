@@ -26,7 +26,7 @@ class PlantItem extends React.Component{
         const plant=this.props.plant.profile
         const displayPlantHealth=this.props.displayPlantHealth
         return (
-            <TouchableOpacity style={{width:200,backgroundColor:'white',margin:5}}onPress={() => displayPlantHealth(plant.id)}>
+            <TouchableOpacity style={{width:200,margin:5}}onPress={() => displayPlantHealth(plant.id)}>
               {typeof this.state.latestImage=="string"?
                         <Image
                             source={{uri: this.state.latestImage}}

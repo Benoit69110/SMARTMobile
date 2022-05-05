@@ -13,7 +13,7 @@ import  AsyncStorage  from '@react-native-async-storage/async-storage';
     const getAnswer = async () => {
         const token =  await AsyncStorage.getItem('token');
         const nn = "null";
-        if(nn !== token){
+        if(nn !== token && token != null){
             console.warn("token = "+token);
             navigation.navigate('TabMenu');
         }else{

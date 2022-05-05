@@ -16,22 +16,22 @@ class PlantLibrary extends React.Component{
         this._getAllDeadPlants()
     }
     _displayPlantHealth=(idPlant)=>{
-        console.log("Display plant with id " + idPlant)
+        // console.log("Display plant with id " + idPlant)
         this.props.navigation.navigate("PlantHealth",{idPlant: idPlant})
     }
 
     _getAllAlivePlants(){
-        console.log("Request all plant alive to Plant'IF API")
+        // console.log("Request all plant alive to Plant'IF API")
         getAllAlivePlants("bal@gmail.com").then(response=>{
-            console.log("res==",response.library)
+            // console.log("res==",response.library)
             this.setState({alivePlants:response.library})
         })
     }
 
     _getAllDeadPlants(){
-        console.log("Request all plants dead to Plant'IF API")
+        // console.log("Request all plants dead to Plant'IF API")
         getAllDeadPlants("bal@gmail.com").then(response=>{
-            console.log("res==",response.library)
+            // console.log("res==",response.library)
             this.setState({deadPlants:response.library})
         })
     }

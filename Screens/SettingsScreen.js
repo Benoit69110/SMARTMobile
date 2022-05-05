@@ -15,31 +15,63 @@ import {
   Image,
   TextInput,
   ScrollView,
-  TouchableOpacity
+  TouchableOpacity,
+  Alert
 } from 'react-native';
 
 
 export default class Profile extends Component {
-
-  state = {
-    username: '',
-    mail:'',
-    newPassword:'',
-    RNewPassword:'',
-    currentPassword: ''
+  constructor(props){
+    super(props)
+    this.state = {
+      username: '',
+      mail:'',
+      newPassword:'',
+      RNewPassword:'',
+      currentPassword: ''
+    }
   }
+  
 
 
   executeOnLoad = async () => {
     console.warn("view has loaded!");
     const mail =  await AsyncStorage.getItem('mail');
     console.warn("mail = "+mail);
+    // getUser(mail).then(response=>{
+    //   console.log(response.connexion)
+    //   if(response["request"]){
+    //       Alert.alert(
+    //         "Modify User",
+    //         "informations has been modified.",
+    //         [{
+    //             text: "Ok",
+    //         }]
+    //       )
+    //   }else{
+    //       Alert.alert(
+    //           "Error",
+    //           "Password is invalid.",
+    //           [{
+    //               text: "Ok",
+    //           }]
+    //       )
+    //   }
+    // });
+  }
+
+  async componentDidMount(){
+    console.warn("view has loaded!");
+    const mail =  await AsyncStorage.getItem('mail');
+    console.warn("mail = "+mail);
     getUser(mail).then(response=>{
-      console.log(response.connexion)
+      console.log(response)
       if(response["request"]){
+        this.setState({ username: response["name"] })
+        this.setState({ mail: response["mail"] })
           Alert.alert(
-            "Modify User",
-            "informations has been modified.",
+            "Load User",
+            "informations has been loaded.",
             [{
                 text: "Ok",
             }]
@@ -47,12 +79,13 @@ export default class Profile extends Component {
       }else{
           Alert.alert(
               "Error",
-              "Password is invalid.",
+              "informations has not been loaded.",
               [{
                   text: "Ok",
               }]
           )
       }
+      
     });
   }
 
@@ -71,27 +104,25 @@ export default class Profile extends Component {
       console.warn("Password does not match");
     }else{
       console.warn("Password does not match");
-        modifyUser(this.state.userName,this.state.mail,this.state.newPassword,this.state.currentPassword).then(response=>{
+        modifyUser(this.state.username,this.state.mail,this.state.newPassword,this.state.currentPassword).then(response=>{
           console.log(response.connexion)
           if(response["request"]){
-            this.setState({ username: response["username"] })
-            this.setState({ mail: response["mail"] })
-              Alert.alert(
-                "Load User",
-                "informations has been loaded.",
+            Alert.alert(
+              "Modify User",
+              "informations has been modified.",
+              [{
+                  text: "Ok",
+              }]
+            )
+        }else{
+            Alert.alert(
+                "Error",
+                "Password is invalid.",
                 [{
                     text: "Ok",
                 }]
-              )
-          }else{
-              Alert.alert(
-                  "Error",
-                  "informations has not been loaded.",
-                  [{
-                      text: "Ok",
-                  }]
-              )
-          }
+            )
+        }
       })
     }
     //const navigation = useNavigation();
@@ -116,7 +147,7 @@ export default class Profile extends Component {
   render() {
     return (
       <ScrollView showVerticalScrollIndicator={false}>
-      <View style={styles.container} onLayout={this.executeOnLoad()} >
+      <View style={styles.container}  >
           <View style={styles.header}></View>
           <Image style={styles.avatar} source={avatar}/>
           <View style={styles.body}>
@@ -126,7 +157,7 @@ export default class Profile extends Component {
             <TextInput
               style={styles.input}
               placeholder="UserName"
-              value={username}
+              value={this.state.username}
               onChangeText={(text) => this.setState({ username: text })}
             />
 
@@ -134,7 +165,7 @@ export default class Profile extends Component {
             <TextInput
               style={styles.input}
               placeholder="Mail@gmail.com"
-              value={mail}
+              value={this.state.mail}
               onChangeText={(text) => this.setState({ mail: text })}
             />
 

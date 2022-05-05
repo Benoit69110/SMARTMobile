@@ -89,14 +89,14 @@ const SignInScreen = ()=> {
                 />
                 <CustomInput placeholder="User Name" value={username} setValue={setuserName} />
                 <CustomInput placeholder="Password" value={password} setValue={setpassword} secureTextEntry />
-                <TextInput
+                {/* <TextInput
                     mode="outlined"
                     label="Email"
                     backgroundColor = "white"
                     placeholder="Password"
                     style={{width:'100%'}}
-                />
-                <CustomButton text="Sign In" onPress={onSignInPressed2} />
+                /> */}
+                <CustomButton text="Sign In" onPress={onSignInPressed} />
                 <CustomButton text="Forgot password ?" onPress={onForgotPasswordPressed} type="TERTIAIRY"/>
                 <CustomButton text="Don't have an account? Create one" onPress={onCreateAccountPressed} type="TERTIAIRY"/>
         </View>
