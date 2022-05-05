@@ -9,6 +9,7 @@ import HomeScreen from '../Screens/HomeScreen'
 import SettingsScreen from '../Screens/SettingsScreen'
 import AddPlantScreen from '../Screens/AddPlantScreen'
 import SocialNetworkScreen from '../Screens/SocialNetworkScreen'
+import Forum from '../Screens/Forum'
 import PlantHealthStackNavigator from './LibraryNavigation';
 import DisconnectNavigation from './DisconnectNavigation';
 
@@ -57,6 +58,13 @@ class TabMenu extends React.Component {
                         <Tab.Screen 
                             name="Social Network" 
                             component={SocialNetworkScreen} 
+                            options = {{
+                                tabBarIcon: () => NETWORK_ICON
+                            }}
+                        />
+                        <Tab.Screen
+                            name="Forum"
+                            component={Forum}
                             options = {{
                                 tabBarIcon: () => NETWORK_ICON
                             }}

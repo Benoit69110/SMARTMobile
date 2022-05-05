@@ -1,5 +1,5 @@
 // const URL="http://192.168.137.243:8080/SMARTweb/ActionServlet"
-const URL="http://10.0.2.2:8080/SMARTweb/ActionServlet"
+const URL="http://192.168.1.55:8080/SMARTweb/ActionServlet"
 
 export function addPlant(plantInfos){
     console.log("Add a plant with API")
