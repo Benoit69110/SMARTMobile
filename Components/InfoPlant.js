@@ -348,8 +348,7 @@ class FindPlant extends React.Component{
 
 
     _addPlantToLibrary(){
-        // console.log("base 64",this.state.image)
-        addImageToPlant(this.state.image,4).then(data=>console.log(data))
+    //    if() 
 
 
         var profileArray={
@@ -382,7 +381,13 @@ class FindPlant extends React.Component{
             var added=1
             addPlant(completeArray).then(result=>{
                 console.log("result add plant",result)
-                this._initialState()
+                console.log("plant ID",result.plantId)
+                addImageToPlant(this.state.image,result.plantId).then(data=>{
+                    console.log(data)
+                    this._initialState()
+                })
+                
+
             })
             if(added==0){
                 Alert.alert(
@@ -566,7 +571,9 @@ class FindPlant extends React.Component{
     }    
 
     _changeVisbility(){
-        this.setState({visibility: !this.state.visibility})
+        var newProfile=this.state.profile
+        newProfile.visibility=!this.state.profile.visibility
+        this.setState({profile: newProfile})
     }
     render(){
         return(
