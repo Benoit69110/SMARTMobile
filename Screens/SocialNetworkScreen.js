@@ -4,18 +4,30 @@ import {StyleSheet, Dimensions,ScrollView, View,Text, Image, ActivityIndicator, 
 import MapView from 'react-native-maps';
 import { Marker } from "react-native-maps";
 import LogoImage from '../assets/logo.png';
-import { getVisiblePlants } from '../API/PlantIFApi';
+import { getVisiblePlants, getAllAlivePlants } from '../API/PlantIFApi';
 import Geolocation from '@react-native-community/geolocation';
 
 const LOGO = Image.resolveAssetSource(LogoImage).uri;
 const userMail = "lenabel2000@hotmail.fr";
 // plants that are visible
-var visiblePlants = getVisiblePlants(userMail);
 // your plants
 // var alivePlants = getAlivePlantLibrary(userMail);
 
 class SettingsScreen extends React.Component{
+    _getVisiblePlants(){
+      getVisiblePlants().then(response=>{
+        console.log(response.library)
+        this.setState({markers: response.library})
+      })
+    }
 
+    _getAllAlivePlants(){
+      // console.log("Request all plant alive to Plant'IF API")
+      getAllAlivePlants("bal@gmail.com").then(response=>{
+          // console.log("res==",response.library)
+          this.setState({yourPlants:response.library})
+      })
+  }
 
      state = {
         region: {
@@ -30,18 +42,18 @@ class SettingsScreen extends React.Component{
             latitudeDelta: 1.5,
             longitudeDelta: 1.5
         },
-        markers: visiblePlants,
+        markers: [],
         // -------------
-        yourPlants: visiblePlants,
+        yourPlants: [],
         // ------------
-        title: "",
-        type_plante: "",
-        humeur: "",
-        photo : "",
+        customizeName: "",
+        botanicalName: ""
      };
 
    componentDidMount () {
         this.relocate()
+        this._getVisiblePlants()
+
    }
   relocate() {
     Geolocation.getCurrentPosition(
@@ -49,8 +61,8 @@ class SettingsScreen extends React.Component{
         let region = {
                   latitude: position.coords.latitude,
                   longitude: position.coords.longitude,
-                  latitudeDelta: 1,
-                  longitudeDelta: 1
+                  latitudeDelta: 3,
+                  longitudeDelta: 3
         };
         this.setState({myPosition:region})
         this.refs.map.animateToRegion(region)
@@ -64,8 +76,8 @@ class SettingsScreen extends React.Component{
       this.setState({ region : region });
     }
 
-    markerClick(title,type_plante,photo, humeur,isAlive) {
-          this.setState({ title:  title, photo: photo, humeur: humeur, type_plante: type_plante});
+    markerClick(customizeName,botanicalName) {
+          this.setState({ customizeName:customizeName, botanicalName: botanicalName});
     }
     render(){
         return(
@@ -80,28 +92,39 @@ class SettingsScreen extends React.Component{
                             title="You are here"
                             pinColor = "blue"
                 />
+                
+                {this.state.markers.map((marker) => (
+                    <Marker
+                            key={marker.profile.id}
+                            coordinate={{
+                              latitude: marker.profile.latitude,
+                              longitude: marker.profile.longitude,
+                              latitudeDelta: 3,
+                              longitudeDelta: 3
+                            }}
+                            title={marker.profile.customizeName}
+                            pinColor = "green"
+                            onPress={() => this.markerClick(marker.profile.customizeName,marker.needs.botanicalName)}
+                    />
+                ))}
                 {this.state.yourPlants.map((marker) => (
                     <Marker
-                            key={marker.key}
-                            coordinate={marker.latlng}
-                            title={marker.title}
+                            key={marker.profile.id}
+                            coordinate={{
+                              latitude: marker.profile.latitude,
+                              longitude: marker.profile.longitude,
+                              latitudeDelta: 3,
+                              longitudeDelta: 3
+                            }}
+                            title={marker.profile.customizeName}
                             pinColor = "red"
                     />
                 ))}
-                {this.state.markers.map((marker) => (
-                    <Marker
-                            key={marker.key}
-                            coordinate={marker.latlng}
-                            title={marker.title}
-                            pinColor = "green"
-                            onPress={() => this.markerClick(marker.title,marker.type_plante,marker.photo, marker.humeur)}
-                    />
-                ))}
             </MapView>
-            <Text style={styles.title}>Nom de la plante: {this.state.title}{"\n"}
-            Type de la plante: {this.state.type_plante}{"\n"}
-            Humeur de la plante : {this.state.humeur}{"\n"}
-            Photo: {this.state.photo}</Text>
+            <Text style={styles.title}>
+              Customize name : {this.state.customizeName}{"\n"}
+              Botanical Name : {this.state.botanicalName}{"\n"}
+            </Text>
         </View>
 
     )

@@ -263,25 +263,24 @@ export function getLatestPlantImage(idPlant){
     .catch((error)=>console.error(error))
 }
 
-export function getVisiblePlants(mail){
+export function getVisiblePlants(){
     console.log("Get visible plants")
-
-     /*const url="http://192.168.020/ActionServlet"
+    const data=JSON.stringify({
+        todo: 'listVisiblePlants',
+    })
+     const url=URL
      return fetch(
-         url,
-         {
+        url,
+        {
             method: 'post',
-            data: {
-               todo: "listAlivePlants",
-               userMail: mail
+            body: data,
+            headers: {
+                'Content-Type':'application/json',
             },
-             headers: {
-                 'Content-Type':'application/json',
-             },
-         }
+        }
      )
      .then((response)=>response.json())
-     .catch((error)=>console.error(error))*/
+     .catch((error)=>console.error(error))
 
 
     /*var res = Math.random();
