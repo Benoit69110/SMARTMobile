@@ -3,11 +3,13 @@ import {Image, View} from 'react-native'
 import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 
 import HomeScreen from '../Screens/HomeScreen'
 import AddPlantScreen from '../Screens/AddPlantScreen'
 import SocialNetworkScreen from '../Screens/SocialNetworkScreen'
+import Forum from '../Screens/Forum'
 import PlantHealthStackNavigator from './LibraryNavigation';
 import DisconnectNavigation from './DisconnectNavigation';
 
@@ -16,6 +18,9 @@ const LIBRARY_ICON=<FontAwesome name="list-ul" size={25} color='#449C76'/>
 const ADD_ICON=<MaterialIcons name="add-circle" size={25} color='#449C76'/>
 const NETWORK_ICON=<MaterialIcons name="group" size={25} color='#449C76'/>
 const PROFILE_ICON=<MaterialIcons name="account-circle" size={25} color='#449C76'/>
+const FORUM_ICON=<MaterialIcons name="forum" size={25} color='#449C76'/>
+const MAP_ICON=<FontAwesome5 name="map-marked-alt" size={23} color='#449C76'/>
+
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -58,8 +63,15 @@ class TabMenu extends React.Component {
                             name="Social Network" 
                             component={SocialNetworkScreen} 
                             options = {{
-                                tabBarIcon: () => NETWORK_ICON,
+                                tabBarIcon: () => MAP_ICON,
                                 lazy: true
+                            }}
+                        />
+                        <Tab.Screen
+                            name="Forum"
+                            component={Forum}
+                            options = {{
+                                tabBarIcon: () => FORUM_ICON
                             }}
                         />
                         <Tab.Screen 
