@@ -9,6 +9,7 @@ import { getLatestPlantImage, getPlantImage, testApi } from '../API/PlantIFApi';
 import {getUserPseudo} from '../Helpers/GetPseudo';
 import { getLatestImage } from '../Helpers/GetLatestImage'
 import NotificationItem from '../Components/NotificationItem'
+import {withNavigation } from 'react-navigation'
 
 
 const HOME_ICON=<FontAwesome name="home" size={25} color='black' style={{marginTop: 5}}/>
@@ -65,7 +66,10 @@ class HomeScreen extends React.Component{
         getUserPseudo().then(data=>{
             this.setState({pseudo:data})
         })
-        // this._getLatestImage(2)
+        props.navigation.addListener('focus',payload=>{
+            console.log("re render")
+            this.render()
+        })
     }
 
 

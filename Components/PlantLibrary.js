@@ -2,7 +2,7 @@ import * as React from 'react';
 import {ScrollView, FlatList, Image, StyleSheet, View,Text} from 'react-native'
 import { getAllAlivePlants, getAllDeadPlants } from '../API/PlantIFApi';
 import PlantItem from './PlantItem'
-import FocusRender from 'react-navigation-focus-render'
+import {withNavigation } from 'react-navigation'
 class PlantLibrary extends React.Component{
 
     constructor(props){
@@ -13,6 +13,11 @@ class PlantLibrary extends React.Component{
             sizeAlive: 0,
             sizeDead: 0
         }
+        props.navigation.addListener('focus',payload=>{
+            console.log("re render")
+            this.componentDidMount()
+            this.render()
+        })
     }
 
     
@@ -72,9 +77,7 @@ class PlantLibrary extends React.Component{
     render(){
         console.log("test")
         return (
-            
             <ScrollView>
-                <FocusRender>
                 <Text style={styles.menu}>Plant Library</Text>
                 <View style={styles.main_container}>
                     <Text style={styles.title_container}>
@@ -83,9 +86,7 @@ class PlantLibrary extends React.Component{
                 </View>
 
                 {this._displayPlants('alive')}
-                {this._displayPlants('dead')}
-                </FocusRender>
-                     
+                {this._displayPlants('dead')}                     
             </ScrollView>
         )
     }

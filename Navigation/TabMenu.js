@@ -39,24 +39,12 @@ class TabMenu extends React.Component {
                             options={{
                                 tabBarIcon: ()=> HOME_ICON,
                             }}
-                            listeners={{
-                                tabPress: (e) => {
-                                    console.log("try",e.target)
-                                    console.log("reloooooad")
-                                },
-                            }}
                         />
                         <Tab.Screen 
                             name="Library" 
                             component={PlantHealthStackNavigator} 
                             options = {{
                                 tabBarIcon: () => LIBRARY_ICON,
-                            }}
-                            listeners={{
-                                tabPress: (e) => {
-                                    this.forceUpdate()
-                                    console.log("reloooooad")
-                                },
                             }}
                         />
                         <Tab.Screen 
@@ -70,14 +58,16 @@ class TabMenu extends React.Component {
                             name="Social Network" 
                             component={SocialNetworkScreen} 
                             options = {{
-                                tabBarIcon: () => NETWORK_ICON
+                                tabBarIcon: () => NETWORK_ICON,
+                                lazy: true
                             }}
                         />
                         <Tab.Screen 
                             name="Profile" 
                             component={DisconnectNavigation} 
                             options = {{
-                                tabBarIcon: () => PROFILE_ICON
+                                tabBarIcon: () => PROFILE_ICON,
+                                lazy: true
                             }}
                         />
 

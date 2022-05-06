@@ -6,6 +6,7 @@ import { Marker } from "react-native-maps";
 import LogoImage from '../assets/logo.png';
 import { getVisiblePlants, getAllAlivePlants } from '../API/PlantIFApi';
 import Geolocation from '@react-native-community/geolocation';
+import {withNavigation } from 'react-navigation'
 
 const LOGO = Image.resolveAssetSource(LogoImage).uri;
 const userMail = "lenabel2000@hotmail.fr";
@@ -14,6 +15,14 @@ const userMail = "lenabel2000@hotmail.fr";
 // var alivePlants = getAlivePlantLibrary(userMail);
 
 class SettingsScreen extends React.Component{
+  constructor(props){
+    super(props)
+    props.navigation.addListener('focus',payload=>{
+        console.log("re render")
+        this.componentDidMount()
+        this.render()
+    })
+}
     _getVisiblePlants(){
       getVisiblePlants().then(response=>{
         console.log(response.library)
