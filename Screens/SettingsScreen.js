@@ -35,9 +35,9 @@ export default class Profile extends Component {
 
 
   executeOnLoad = async () => {
-    console.warn("view has loaded!");
+    // console.warn("view has loaded!");
     const mail =  await AsyncStorage.getItem('mail');
-    console.warn("mail = "+mail);
+    // console.warn("mail = "+mail);
     // getUser(mail).then(response=>{
     //   console.log(response.connexion)
     //   if(response["request"]){
@@ -61,9 +61,9 @@ export default class Profile extends Component {
   }
 
   async componentDidMount(){
-    console.warn("view has loaded!");
+    // console.warn("view has loaded!");
     const mail =  await AsyncStorage.getItem('mail');
-    console.warn("mail = "+mail);
+    // console.warn("mail = "+mail);
     getUser(mail).then(response=>{
       console.log(response)
       if(response["request"]){
@@ -93,7 +93,7 @@ export default class Profile extends Component {
     //const navigation = useNavigation();
     await AsyncStorage.setItem('token', 'null');
     const token =  await AsyncStorage.getItem('token');
-    console.warn("token = "+token);
+    // console.warn("token = "+token);
     this.props.navigation.navigate("LoginNavigation")
     //navigation.navigate('SignIn');
   }
@@ -101,9 +101,9 @@ export default class Profile extends Component {
 
   onUpdateProfilePressed = async ()=>{
     if(this.state.newPassword !== this.state.RNewPassword){
-      console.warn("Password does not match");
+      // console.warn("Password does not match");
     }else{
-      console.warn("Password does not match");
+      // console.warn("Password does not match");
         modifyUser(this.state.username,this.state.mail,this.state.newPassword,this.state.currentPassword).then(response=>{
           console.log(response.connexion)
           if(response["request"]){
@@ -140,7 +140,7 @@ export default class Profile extends Component {
 
   _displayUserName = async ()=>{
     const token =  await AsyncStorage.getItem('token');
-    console.warn("tokentiyiyi = "+token);
+    // console.warn("tokentiyiyi = "+token);
     return (test="Test");
   }
   

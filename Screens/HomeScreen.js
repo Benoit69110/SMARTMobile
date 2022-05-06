@@ -169,6 +169,7 @@ class HomeScreen extends React.Component{
     }
     
     render(){        
+        console.warn("hidden")
         return(
         <ScrollView>
             <Text style={styles.menu}>Home</Text>
