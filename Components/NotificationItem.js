@@ -18,10 +18,18 @@ class NotificationItem extends React.Component{
     constructor(props){
         super(props)
         this.state={
-            latestImage:undefined
+            latestImage:undefined,
+            water: "",
+            light: "",
+            temperature: "",
         }
+        console.log(this.props.plant)
+        this._getLatestImage(this.props.plant.plantId)
+        this._parseProblem()
         
-        this._getLatestImage(this.props.plant.idPlant)
+    }
+    componentDidMount(){
+        // this._parseProblem()
     }
     _getLatestImage(idPlant){
         getLatestPlantImage(idPlant).then(response=>{
@@ -39,6 +47,31 @@ class NotificationItem extends React.Component{
 
             }
         })
+    }
+
+    _parseProblem(){
+        console.log(this.props.plant)
+        this.setState({water: this.props.plant["water"]})
+        this.setState({light: this.props.plant["light"]})
+        this.setState({temperature: this.props.plant["temperature"]})
+
+        // for(var elt in this.props.plant){
+        //     // console.log(elt)
+        //     // console.log(this.props.plant[elt])
+        //     if(elt=="water" ){
+        //     console.log(this.props.plant[elt])
+
+                
+        //     }else if(elt=="light"){
+        //     console.log(this.props.plant[elt]=="undefined")
+
+        //         this.setState({light: this.props.plant[elt]})
+        //     }else if(elt=="temperature"){
+        //     console.log(this.props.plant[elt])
+
+        //         this.setState({temperature: this.props.plant[elt]})
+        //     }
+        // }
     }
     _displayIconProblem(problem){
         switch(problem){
@@ -68,8 +101,9 @@ class NotificationItem extends React.Component{
         const displayPlantHealth=this.props.displayPlantHealth
         return(
             <View>
+                {this.props.plant.water=="undefined"? null:
                 <TouchableOpacity
-                    onPress={()=>displayPlantHealth(this.props.plant.idPlant)}
+                    onPress={()=>displayPlantHealth(this.props.plant.plantId)}
                     style={{flexDirection: 'row', margin: 10}}
                 >
                     {typeof this.state.latestImage=="string"?
@@ -106,11 +140,11 @@ class NotificationItem extends React.Component{
                                     textAlignVertical: 'center'
                                 }}
                             >
-                                {this.props.plant.customizeName} {this.props.plant.need}
+                                {this.props.plant.plantCustomizeName} {this.props.plant.water}
                             </Text>
                         </View>
                         <View style={{width:'25%',alignItems:'center'}}>
-                            {this._displayIconProblem(this.props.plant.problem)}
+                            {this._displayIconProblem("water")}
 
                         </View>
                         
@@ -118,6 +152,111 @@ class NotificationItem extends React.Component{
                     
                     
                 </TouchableOpacity>
+                }
+                {this.props.plant.light=="undefined"? null:
+                <TouchableOpacity
+                    onPress={()=>displayPlantHealth(this.props.plant.plantId)}
+                    style={{flexDirection: 'row', margin: 10}}
+                >
+                    {typeof this.state.latestImage=="string"?
+                        <Image
+                            source={{uri: this.state.latestImage}}
+                            style={{
+                                width: 70,
+                                height: 70,
+                                borderRadius: 55,
+                                borderColor:'#aba8c8',
+                                marginRight: 10,
+                            }}
+                        />
+                    :
+                        <Image
+                            source={require('../assets/plante.jpg')}
+                            style={{
+                                width: 70,
+                                height: 70,
+                                borderRadius: 55,
+                                borderColor:'#aba8c8',
+                                marginRight: 10,
+                            }}
+                        />
+                    }
+                    <View style={{flexDirection: 'row'}}>
+                        <View style={{width:'65%'}}>
+                            <Text
+                                style={{
+                                    marginLeft:10,
+                                    marginBottom:10,
+                                    color:'black',
+                                    fontSize: 15,
+                                    textAlignVertical: 'center'
+                                }}
+                            >
+                                {this.props.plant.plantCustomizeName} {this.props.plant.sun}
+                            </Text>
+                        </View>
+                        <View style={{width:'25%',alignItems:'center'}}>
+                            {this._displayIconProblem("light")}
+
+                        </View>
+                        
+                    </View>
+                    
+                    
+                </TouchableOpacity>
+                }
+                {this.props.plant.temperature=="undefined"? null:
+                <TouchableOpacity
+                    onPress={()=>displayPlantHealth(this.props.plant.plantId)}
+                    style={{flexDirection: 'row', margin: 10}}
+                >
+                    {typeof this.state.latestImage=="string"?
+                        <Image
+                            source={{uri: this.state.latestImage}}
+                            style={{
+                                width: 70,
+                                height: 70,
+                                borderRadius: 55,
+                                borderColor:'#aba8c8',
+                                marginRight: 10,
+                            }}
+                        />
+                    :
+                        <Image
+                            source={require('../assets/plante.jpg')}
+                            style={{
+                                width: 70,
+                                height: 70,
+                                borderRadius: 55,
+                                borderColor:'#aba8c8',
+                                marginRight: 10,
+                            }}
+                        />
+                    }
+                    <View style={{flexDirection: 'row'}}>
+                        <View style={{width:'65%'}}>
+                            <Text
+                                style={{
+                                    marginLeft:10,
+                                    marginBottom:10,
+                                    color:'black',
+                                    fontSize: 15,
+                                    textAlignVertical: 'center'
+                                }}
+                            >
+                                {this.props.plant.plantCustomizeName} {this.props.plant.temperature}
+                            </Text>
+                        </View>
+                        <View style={{width:'25%',alignItems:'center'}}>
+                            {this._displayIconProblem("temperature")}
+
+                        </View>
+                        
+                    </View>
+                    
+                    
+                </TouchableOpacity>
+    }
             </View>
             
         )

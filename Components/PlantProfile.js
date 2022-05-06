@@ -345,7 +345,7 @@ class PlantProfile extends React.Component{
             title=title.charAt(0).toLowerCase() + title.slice(1)
             needsArray.needs[title]=item.value
         }
-        var completeArray={todo: "updatePlant",idPlant:  this.idPlant}
+        var completeArray={todo: "updatePlant",plantId:  this.idPlant}
         completeArray={...completeArray,...profileArray}
         completeArray={...completeArray,...needsArray}
         console.log(completeArray)
@@ -356,7 +356,7 @@ class PlantProfile extends React.Component{
             addPlant(completeArray).then(result=>{
                 console.log("result add plant",result)
                 try{
-                    if(result.reques=="Ok"){
+                    if(result.length!=0){
                         Alert.alert(
                             "Success !",
                             "Congratulations ! Your plant has been successfully modified.",

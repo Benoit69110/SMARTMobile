@@ -51,7 +51,7 @@ class PlantHealth extends React.Component{
 
         }
         this.date = new Date()
-        this.date = this.date.getDate()+'/'+(this.date.getMonth()+1)+'/'+this.date.getFullYear()
+        this.date = (this.date.getMonth()+1)+'/'+this.date.getDate()+'/'+this.date.getFullYear()
         console.log("current date",this.date)
         
     }
@@ -80,6 +80,7 @@ class PlantHealth extends React.Component{
         this._getInfoAboutConstant("heat",this.state.waterMean)
     }
     _getInfoAboutConstant(constantType,value){
+        console.log(constantType,value)
         var msg=""
         if(Math.abs(value)<=12){
             msg ="Your plant needs "
@@ -110,15 +111,19 @@ class PlantHealth extends React.Component{
 
     _getConstant(){
         getPlantConstantGlobal(this.state.idPlant,this.date).then(data=>{
+            console.log("received",data)
             this.setState({globalMean: data.globalMark})
         })
         getPlantConstantWater(this.state.idPlant,this.date).then(data=>{
+            console.log("received",data)
             this.setState({waterMean: data.waterMark})
         })
         getPlantConstantLight(this.state.idPlant,this.date).then(data=>{
+            console.log("received",data)
             this.setState({lightMean: data.lightMark})
         })
         getPlantConstantTemperature(this.state.idPlant,this.date).then(data=>{
+            console.log("received",data)
             this.setState({tempMean: data.tempMark})
         })
     }

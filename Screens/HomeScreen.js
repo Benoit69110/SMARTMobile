@@ -5,7 +5,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import EntypoIcon from 'react-native-vector-icons/Entypo'
-import { getLatestPlantImage, getPlantImage, testApi } from '../API/PlantIFApi';
+import { getAlerts, getLatestPlantImage, getPlantImage, testApi } from '../API/PlantIFApi';
 import {getUserPseudo} from '../Helpers/GetPseudo';
 import { getLatestImage } from '../Helpers/GetLatestImage'
 import NotificationItem from '../Components/NotificationItem'
@@ -60,7 +60,9 @@ class HomeScreen extends React.Component{
         this.state={
             showTutorial: false,
             pseudo: "",
-            latestImage: undefined
+            latestImage: undefined,
+            notifications: [],
+            nbNotif: 0
         }
         
         getUserPseudo().then(data=>{
@@ -68,11 +70,17 @@ class HomeScreen extends React.Component{
         })
         props.navigation.addListener('focus',payload=>{
             console.log("re render")
+            this.componentDidMount()
             this.render()
         })
     }
 
-
+    componentDidMount(){
+        getAlerts().then(response=>{
+            console.log(response)
+            this.setState({notifications: response.notifications, nbNotif: response.notifications.length})
+        })
+    }
     _displayTutorial(){
         return (
             <View style={styles.main_container}>
@@ -91,6 +99,8 @@ class HomeScreen extends React.Component{
                         </Text>
                     </View>
                 )}
+                
+                    
             </View>
         )
     }
@@ -117,7 +127,7 @@ class HomeScreen extends React.Component{
                 return WARNNING_ICON
                 break
         }
-    }
+    }  
     _displayNotifications(){
         var data=[
             {
@@ -156,10 +166,13 @@ class HomeScreen extends React.Component{
                 problem: 'general'
             }
         ]
+        
         return(
             <View style={styles.main_container}>
                 <Text style={styles.title_container}>Notifications :</Text>
-                {Object.entries(data).map(([key,item]) =>
+                
+                {this.state.nbNotif==0?<Text>You don't have any notification</Text>:null}
+                {Object.entries(this.state.notifications).map(([key,item]) =>
                     <View key={key}>
                         <NotificationItem plant={item} displayPlantHealth={this._displayPlantHealth}/>
                     </View>

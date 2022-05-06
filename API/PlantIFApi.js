@@ -496,3 +496,25 @@ export function getAllDeadPlants(){
     .catch((error)=>console.error(error))
 
 }
+
+export function getAlerts(){
+    console.log("Get alerts ")
+    const data=JSON.stringify({
+        todo: 'getAlert',
+    })
+    console.log(data)
+    const url=URL
+    return fetch(
+        url,
+        {
+            method: 'post',
+            body: data,
+            headers: {
+                'Content-Type':'application/json',
+            },
+        }
+    )
+    .then((response)=>response.json())
+    .catch((error)=>console.error(error))
+
+}
