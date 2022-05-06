@@ -466,10 +466,14 @@ class PlantProfile extends React.Component{
                                 <Text style={styles.dead_text}>Your plant is dead</Text>
                             }
                         </View>
-                        <Button
-                            title="Modify my plant"
-                            onPress={()=>this.setState({editable: !this.state.editable})}
-                        />
+                        {this.state.profile.alive?
+                            <Button
+                                title="Modify my plant"
+                                onPress={()=>this.setState({editable: !this.state.editable})}
+                            />
+                        :
+                            null
+                        }
                     </View>
                 </View>
                 {this._profilePlant()}
